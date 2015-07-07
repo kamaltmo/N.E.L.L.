@@ -13,11 +13,11 @@ if(isset($_SESSION['login_user'])){
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-        <script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-        <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css"
+        <script type="text/javascript" src="css/jquery.min.js"></script>
+        <script type="text/javascript" src="css/bootstrap.min.js"></script>
+        <link href="css/font-awesome.min.css"
         rel="stylesheet" type="text/css">
-        <link href="http://pingendo.github.io/pingendo-bootstrap/themes/default/bootstrap.css"
+        <link href="css/bootstrap.css"
         rel="stylesheet" type="text/css">
     </head>
     
@@ -44,10 +44,14 @@ if(isset($_SESSION['login_user'])){
                     <div class="col-md-4"></div>
                     <div class="col-md-4">
                         <div class="well well-lg">
-                            <div class="alert alert-danger alert-dismissable">
-                            <button contenteditable="false" type="button" class="close" data-dismiss="alert"
-                            aria-hidden="true">×</button>
-                             <strong><?php echo $error; ?></div>
+                            <?php
+                            if ($error != '') {
+                                echo'<div class="alert alert-danger alert-dismissable">
+                                        <button contenteditable="false" type="button" class="close" data-dismiss="alert"
+                                         aria-hidden="true">×</button>
+                                            <strong>' .$error. '</div>';
+                            }
+                            ?>
                             <form role="form" action="" method="post">
                                 <div class="form-group">
                                     <label class="control-label" for="username">Username</label>
