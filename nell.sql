@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 07, 2015 at 05:38 PM
+-- Generation Time: Jul 09, 2015 at 01:16 PM
 -- Server version: 5.6.24
 -- PHP Version: 5.6.8
 
@@ -32,6 +32,13 @@ CREATE TABLE IF NOT EXISTS `login` (
   `password` varchar(25) NOT NULL,
   `admin` int(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `login`
+--
+
+INSERT INTO `login` (`username`, `student_id`, `password`, `admin`) VALUES
+('Admin', 0, '1234Admin', 1);
 
 -- --------------------------------------------------------
 
