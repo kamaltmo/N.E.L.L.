@@ -8,7 +8,7 @@
 		Password will be null for now
 		
 		***********************************************************************************
-		IN THE FURUTRE: FIND A WAY TO GENERATE A RANDOM PASSWORD AND SEND IT TO THE STUDENT
+		IN THE FURUTRE: FIND A WAY TO SEND THE GENERATED PASSWORD TO THE STUDENT need student email column?
 		***********************************************************************************
 		
 	*/
@@ -34,6 +34,7 @@
 			$databasetable = "login";								// Change to 'test'
 			$column1 = "username";
 			$column2 = "student_id";
+			$column3 = "password";
 			
 			//	***********************************************
 			
@@ -65,16 +66,20 @@
 			{
 				$userName = trim($allDataInSheet[$i]["A"]);
 				$id = trim($allDataInSheet[$i]["B"]);
+				$query = "SELECT SUBSTRING(MD5(RAND()) FROM 1 FOR 6)";
+				$sql = mysql_query($query);
+				$recResult = mysql_fetch_array($sql);
+				$password = $recResult[0];
 				
 				//Search for duplicates
 				$query = "SELECT " . $column2 . " FROM " . $databasetable . " WHERE " . $column1 . " = '".$userName."' and " . $column2 . " = '".$id."'";
 				$sql = mysql_query($query);
 				$recResult = mysql_fetch_array($sql);
 				$existName = $recResult[$column2];				// Search for a match to the Primary key (student_id)
-				// If the row hasn't already been inserted...
+				// If the row hasn't already been inserted create a new student user
 				if($existName=="") 
 				{
-					$insertTable= mysql_query("insert into " . $databasetable . " (" . $column1 . ", " . $column2 . ") values('".$userName."', '".$id."');");
+					$insertTable= mysql_query("insert into " . $databasetable . " (" . $column1 . ", " . $column2 . ", " . $column3 . ") values('".$userName."', '".$id."', '" . $password . "');");
 					$msg = 'Record has been added.';
 				} 
 				else 
