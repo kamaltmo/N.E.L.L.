@@ -31,10 +31,14 @@
 			//	Set up all details about the table you're using
 			
 			define ("DB_NAME", "nell"); 						
-			$databasetable = "login";								// Change to 'test'
-			$column1 = "username";
-			$column2 = "student_id";
-			$column3 = "password";
+			$databasetable = "questions";								// Change to 'test'
+			$column1 = "question";
+			$column2 = "answer1";
+			$column3 = "answer2";
+			$column4 = "answer3";
+			$column5 = "answer4";
+			$column6 = "slide_id";
+			$column7 = "question_id";
 			
 			//	***********************************************
 			
@@ -64,22 +68,26 @@
 			// Go through each row one by one
 			for($i=2; $i <= $arrayCount; $i++)
 			{
-				$userName = trim($allDataInSheet[$i]["A"]);
-				$id = trim($allDataInSheet[$i]["B"]);
-				$query = "SELECT SUBSTRING(MD5(RAND()) FROM 1 FOR 6)";
-				$sql = mysql_query($query);
-				$recResult = mysql_fetch_array($sql);
-				$password = $recResult[0];
+				$question = trim($allDataInSheet[$i]["A"]);
+				$answer1 = trim($allDataInSheet[$i]["B"]);
+				$answer2 = trim($allDataInSheet[$i]["C"]);
+				$answer3 = trim($allDataInSheet[$i]["D"]);
+				$answer4 = trim($allDataInSheet[$i]["E"]);
+				$slide_id = trim($allDataInSheet[$i]["F"]);
+				//Find out the id by finding out how many questions are already there
+				$query = "SELECT * FROM " . $databasetable;
+				$result = mysql_query($query);
+				$question_id = mysql_num_rows($result);
 				
 				//Search for duplicates
-				$query = "SELECT " . $column2 . " FROM " . $databasetable . " WHERE " . $column1 . " = '".$userName."' and " . $column2 . " = '".$id."'";
+				$query = "SELECT " . $column7 . " FROM " . $databasetable . " WHERE " . $column1 . " = '".$question."' and " . $column2 . " = '".$answer1."' and " . $column6 . " = '" . $slide_id . "'";
 				$sql = mysql_query($query);
 				$recResult = mysql_fetch_array($sql);
-				$existName = $recResult[$column2];				// Search for a match to the Primary key (student_id)
+				$existName = $recResult[$column7];				// Search for a match to the Primary key (question_id)
 				// If the row hasn't already been inserted create a new student user
 				if($existName=="") 
 				{
-					$insertTable= mysql_query("insert into " . $databasetable . " (" . $column1 . ", " . $column2 . ", " . $column3 . ") values('".$userName."', '".$id."', '" . $password . "');");
+					$insertTable= mysql_query("insert into " . $databasetable . " (" . $column1 . ", " . $column2 . ", " . $column3 . ", " . $column4 . ", " . $column5 . ", " . $column6 . ", " . $column7 . ") values('".$question."', '".$answer1."', '".$answer2."', '".$answer3."', '".$answer4."', '".$slide_id."', '" . $question_id . "');");
 					$msg = 'Record has been added.';
 				} 
 				else 
