@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 09, 2015 at 01:16 PM
+-- Generation Time: Jul 10, 2015 at 01:24 PM
 -- Server version: 5.6.24
 -- PHP Version: 5.6.8
 
@@ -23,13 +23,26 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `glossary`
+--
+
+CREATE TABLE IF NOT EXISTS `glossary` (
+  `term` varchar(255) NOT NULL,
+  `definition` varchar(400) NOT NULL,
+  `term_id` int(11) NOT NULL,
+  `slide_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `login`
 --
 
 CREATE TABLE IF NOT EXISTS `login` (
   `username` varchar(255) NOT NULL,
   `student_id` int(9) NOT NULL,
-  `password` varchar(25) NOT NULL,
+  `password` varchar(25) DEFAULT NULL,
   `admin` int(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -70,6 +83,12 @@ CREATE TABLE IF NOT EXISTS `questions` (
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `glossary`
+--
+ALTER TABLE `glossary`
+  ADD PRIMARY KEY (`term_id`);
 
 --
 -- Indexes for table `login`

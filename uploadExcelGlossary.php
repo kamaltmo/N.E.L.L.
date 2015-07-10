@@ -31,9 +31,9 @@
 
 <html>
 	<head>
-		<title>Upload Excel Student List File</title>
-		<meta name="description" content="First upload the excel shee and then click to import it into database."/>
-		
+		<title>Upload Excel Glossary File</title>
+		<meta name="description" content="First upload an excel sheet into your server and then click to import it into database. All columns of the excel sheet will be stored into a corresponding database table."/>
+		<meta name="keywords" content="import excel file data in mysql, upload ecxel file in mysql, upload data, code to import excel data in mysql database, php, Mysql, Ajax, Jquery, Javascript, download, upload, upload excel file,mysql"/>
 	</head>
 	<body>
 		<table>
@@ -63,7 +63,7 @@
 			<?php
 				if($uploadStatus==1)
 				{
-					echo 	"<center>============================= <br/><b>File Uploaded<b/><br/>============================= <br/><b>Do you want to upload the data?<a href='convertExcel.php'>Click Here</a></b><br/>========================</center>";
+					echo 	"<center>============================= <br/><b>File Uploaded<b/><br/>============================= <br/><b>Do you want to upload the data?<a href='convertExcelGlossary.php'>Click Here</a></b><br/>========================</center>";
 				}
 			?>
 		</form>
