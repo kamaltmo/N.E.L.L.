@@ -2,7 +2,7 @@
 include('login.php'); // Includes Login Script
 
 if(isset($_SESSION['login_user'])){
-    //header("location: page");
+    header("location: profile.php");
     //Redirect to page on login success
 }
 ?>

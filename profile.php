@@ -1,7 +1,15 @@
 <?php
     session_start();
-    $name = $_SESSION['login_user'];
+
+    if(!isset($_SESSION['login_user'])){
+        header("location: index.php");
+    //Redirect to page on login success
+    } else  {
+        $name = $_SESSION['login_user'];
+        $group = $_SESSION['user_group'];
+    }
 ?>
+
 <!DOCTYPE html>
 <html>
     
@@ -26,7 +34,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="#"><span>N.E.L.L Test</span></a>
+                    <a class="navbar-brand" href="index.php"><span>N.E.L.L Test</span></a>
                 </div>
                 <div class="collapse navbar-collapse" id="navbar-ex-collapse">
                     <ul class="nav navbar-nav navbar-right"></ul>
@@ -36,14 +44,20 @@
         <div class="section">
             <div class="container">
                 <div class="row">
-                    <div class="col-md-4"></div>
+                <div class="col-md-4">
+                    <ul class="nav nav-pills nav-stacked lead list-group text-info">
+                        <li ><a href="uploadExcel.php">Upload Student Information</a></li>
+                        <li ><a href="uploadExcelQuestions.php">Upload Questions</a></li>
+                        <li ><a href="uploadExcelGlossary.php">Upload Glossary</a></li>
+                    </ul>
+                </div>
                     <div class="col-md-4">
                         <div class="alert alert-dismissable alert-success">
                             <button contenteditable="false" type="button" class="close" data-dismiss="alert"
                             aria-hidden="true">×</button>
                             <b>Login Successfull</b>
                         </div>
-                        <p>Welcome <?php echo $name; ?></p>
+                        <h3>Welcome <?php echo $name; ?></h3>
                         <a href="logout.php" class="btn btn-block btn-info btn-lg">Log Out</a>
                     </div>
                 </div>

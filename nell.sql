@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 10, 2015 at 01:24 PM
+-- Generation Time: Jul 13, 2015 at 04:53 PM
 -- Server version: 5.6.24
 -- PHP Version: 5.6.8
 
@@ -43,14 +43,16 @@ CREATE TABLE IF NOT EXISTS `login` (
   `username` varchar(255) NOT NULL,
   `student_id` int(9) NOT NULL,
   `password` varchar(25) DEFAULT NULL,
-  `admin` int(1) NOT NULL DEFAULT '0'
+  `Group` int(1) NOT NULL DEFAULT '3' 
+  -- Changed admin to group, admins will have 1, teachers will have 2 and students will be 3
+  -- This will be use to limit access to webpages
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `login`
 --
 
-INSERT INTO `login` (`username`, `student_id`, `password`, `admin`) VALUES
+INSERT INTO `login` (`username`, `student_id`, `password`, `Group`) VALUES
 ('Admin', 0, '1234Admin', 1);
 
 -- --------------------------------------------------------

@@ -1,4 +1,11 @@
 <?php
+
+	session_start();
+	//Redirect if not logged in or not a admin or teacher
+	if(!isset($_SESSION['login_user']) || ($_SESSION['user_group'] == '3')){
+        header("location: index.php");
+    } else  {
+
 	$uploadStatus = 0;
 
 	if(isset($_POST["submit"]))
@@ -27,6 +34,8 @@
 			echo "No file selected <br/>";
 		}
 	}
+
+}
 ?>
 
 <html>
@@ -52,7 +61,7 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</button>
-					<a class="navbar-brand" href="#"><span>N.E.L.L. Test</span></a>
+					<a class="navbar-brand" href="index.php"><span>N.E.L.L. Test</span></a>
 				</div>
 				<div class="collapse navbar-collapse" id="navbar-ex-collapse">
 					<ul class="nav navbar-nav navbar-right"></ul>
@@ -62,7 +71,13 @@
 		<div class="section">
 			<div class="container">
                 <div class="row">
-                    <div class="col-md-4"></div>
+                    <div class="col-md-4">
+                    	<ul class="nav nav-pills nav-stacked lead list-group text-info">
+                        	<li ><a href="uploadExcel.php">Upload Student Information</a></li>
+                        	<li ><a href="uploadExcelQuestions.php">Upload Questions</a></li>
+                        	<li class="active"><a href="uploadExcelGlossary.php">Upload Glossary</a></li>
+                    	</ul>
+                	</div>
                     <div class="col-md-4">
                         <div class="well well-lg">
 							<form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post" enctype="multipart/form-data">

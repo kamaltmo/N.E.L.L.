@@ -28,7 +28,13 @@
             $conn->close(); 
 
 	            if ($result->num_rows == 1) {
-					$_SESSION['login_user']= $uName; // Initializing Session
+					// Initializing Session
+
+					while ($row = $result->fetch_assoc()) { 
+						$_SESSION['login_user']= $row['username']; 
+						$_SESSION['user_group']= $row['Group']; 
+					}
+
 					header("location: profile.php");
     				//Redirect to page on login success
 				} else {
