@@ -1,0 +1,36 @@
+nell:
+	modules:
+		mod_code (PRIMARY)
+		lecturer
+	lecturers:
+		email
+		password
+		first_name
+		last_name
+		mod_code (linked to modules)
+		
+COMPX:
+	students:
+		student_id (PRIMARY)
+		email (?)
+		password
+		first_name
+		last_name
+	glossary:
+		term_id (PRIMARY)
+		term
+		definition
+	multi_questions:
+		question_id (PRIMARY)
+		question
+		answer1
+		answer2
+		answer3
+		answer4
+	free_text_questions:
+		question_id (PRIMARY)
+		question
+		answer
+	queries:
+		student_id (linked to students)
+		query
