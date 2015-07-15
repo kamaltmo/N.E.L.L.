@@ -23,6 +23,7 @@ COMPX:
 	multi_questions:
 		question_id (PRIMARY)
 		question
+		hint                                       //Information for student when they get the question wrong
 		answer1
 		answer2
 		answer3
