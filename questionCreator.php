@@ -149,9 +149,9 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-12">
+                        <h2>Question Info</h2>
                         <div class="text-left well" id="question1">
                             <div class="col-md-12">
-                                <h2>Question Info</h2>
                                 <div class="row">
                                     <div class="col-md-4">
                                         <form role="form" action="" method="post">
@@ -349,6 +349,11 @@
                 $("#UploadSection").show();
                 $("#AddSection").hide();
                 $("#UpdateSection").hide();
+            });
+
+            var clone = 2;
+            $("#newquestion").click(function() {
+                $("#question1").clone().attr("id", "question" + clone++).insertAfter("#question" + (clone - 2));
             });
         });
 

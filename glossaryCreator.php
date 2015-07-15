@@ -152,7 +152,7 @@
             <div class="text-left well" id="question1">
               <div class="col-md-12">
                 <h2>Term Info</h2>
-                <div class="row">
+                <div class="row" id= "term1">
                   <div class="col-md-3">
                     <form class="form-horizontal" role="form">
                       <div class="form-group">
@@ -207,7 +207,7 @@
             <form class="form-horizontal" role="form">
               <div class="form-group">
                 <div class="col-sm-2">
-                  <label class="control-label">Select Question</label>
+                  <label class="control-label">Select Term</label>
                 </div>
                 <div class="col-sm-10">
                   <select class="form-control"></select>
@@ -301,6 +301,11 @@
                 $("#UploadSection").show();
                 $("#AddSection").hide();
                 $("#UpdateSection").hide();
+            });
+
+            var clone = 2;
+            $("#newTerm").click(function() {
+                $("#term1").clone().attr("id", "term" + clone++).insertAfter("#term" + (clone - 2));
             });
         });
 
