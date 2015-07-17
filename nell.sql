@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 13, 2015 at 04:53 PM
+-- Generation Time: Jul 17, 2015 at 07:56 PM
 -- Server version: 5.6.24
 -- PHP Version: 5.6.8
 
@@ -23,63 +23,34 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `glossary`
+-- Table structure for table `lecturers`
 --
 
-CREATE TABLE IF NOT EXISTS `glossary` (
-  `term` varchar(255) NOT NULL,
-  `definition` varchar(400) NOT NULL,
-  `term_id` int(11) NOT NULL,
-  `slide_id` int(11) NOT NULL
+CREATE TABLE IF NOT EXISTS `lecturers` (
+  `lecturer_id` int(9) NOT NULL,
+  `email` varchar(40) NOT NULL,
+  `password` varchar(20) NOT NULL,
+  `first_name` varchar(30) NOT NULL,
+  `last_name` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `lecturers`
+--
+
+INSERT INTO `lecturers` (`lecturer_id`, `email`, `password`, `first_name`, `last_name`) VALUES
+(1, 'admin', '1234Admin', 'NELL', 'Administrator'),
+(42134, 'ewaf', 'rewhgt', 'cdsssss', 'vaefwe');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `login`
+-- Table structure for table `modules`
 --
 
-CREATE TABLE IF NOT EXISTS `login` (
-  `username` varchar(255) NOT NULL,
-  `student_id` int(9) NOT NULL,
-  `password` varchar(25) DEFAULT NULL,
-  `Group` int(1) NOT NULL DEFAULT '3' 
-  -- Changed admin to group, admins will have 1, teachers will have 2 and students will be 3
-  -- This will be use to limit access to webpages
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `login`
---
-
-INSERT INTO `login` (`username`, `student_id`, `password`, `Group`) VALUES
-('Admin', 0, '1234Admin', 1);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `queries`
---
-
-CREATE TABLE IF NOT EXISTS `queries` (
-  `student_id` int(11) NOT NULL,
-  `query` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `questions`
---
-
-CREATE TABLE IF NOT EXISTS `questions` (
-  `question` varchar(255) DEFAULT NULL,
-  `answer1` varchar(255) DEFAULT NULL,
-  `answer2` varchar(255) DEFAULT NULL,
-  `answer3` varchar(255) DEFAULT NULL,
-  `answer4` varchar(255) DEFAULT NULL,
-  `slide_id` int(11) DEFAULT NULL,
-  `question_id` int(11) NOT NULL
+CREATE TABLE IF NOT EXISTS `modules` (
+  `mod_code` varchar(9) NOT NULL,
+  `lecturer_id` int(9) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -87,28 +58,26 @@ CREATE TABLE IF NOT EXISTS `questions` (
 --
 
 --
--- Indexes for table `glossary`
+-- Indexes for table `lecturers`
 --
-ALTER TABLE `glossary`
-  ADD PRIMARY KEY (`term_id`);
+ALTER TABLE `lecturers`
+  ADD PRIMARY KEY (`lecturer_id`);
 
 --
--- Indexes for table `login`
+-- Indexes for table `modules`
 --
-ALTER TABLE `login`
-  ADD PRIMARY KEY (`student_id`);
+ALTER TABLE `modules`
+  ADD PRIMARY KEY (`mod_code`), ADD KEY `lecturer_id` (`lecturer_id`);
 
 --
--- Indexes for table `queries`
+-- Constraints for dumped tables
 --
-ALTER TABLE `queries`
-  ADD KEY `student_id` (`student_id`);
 
 --
--- Indexes for table `questions`
+-- Constraints for table `modules`
 --
-ALTER TABLE `questions`
-  ADD PRIMARY KEY (`question_id`);
+ALTER TABLE `modules`
+ADD CONSTRAINT `lec_match` FOREIGN KEY (`lecturer_id`) REFERENCES `lecturers` (`lecturer_id`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

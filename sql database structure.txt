@@ -1,13 +1,13 @@
 nell:
 	modules:
 		mod_code (PRIMARY)
-		lecturer
+		lecturer_id (linked to lecturers)
 	lecturers:
+		lecturer_id
 		email
 		password
 		first_name
 		last_name
-		mod_code (linked to modules)
 		
 COMPX:
 	students:
