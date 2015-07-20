@@ -8,11 +8,77 @@
 	//**************************************************************************************************
 	//	JOBS:
 	//		-	Check to see that the person is logged on as admin (under session_starts())
+	//		-	Only allow mods with lecturers to be displayed as options
 	//		-	Check to see if the lecturer has any other modules, if not offer to delete the lecturer
 	//**************************************************************************************************
 	
 	session_start();
 	//Check they're logged on etc.
+	
+	$section = 0;
+	define ("DB_HOST", "localhost");
+	define ("DB_USER", "root");
+	define ("DB_PASS", "");
+	define ("DB_NAME", "nell");
+	$link = mysql_connect(DB_HOST, DB_USER, DB_PASS) or die("Couldn't make connection.");
+	$db = mysql_select_db(DB_NAME, $link) or die("Couldn't select database");
+	
+	// ************** 0 - Select module ***************
+	if(isset($_POST["submit1"]))
+	{
+		$section = 1;
+		$_SESSION["modCode"] = $_POST["modOption"];
+		$query = mysql_query("SELECT lecturer_id FROM modules WHERE mod_code = '" . $_SESSION["modCode"] . "'");
+		$row = mysql_fetch_row($query);
+		$_SESSION["lecCode"] = $row[0];
+		$query = mysql_query("SELECT first_name, last_name FROM lecturers WHERE lecturer_id = " . $_SESSION["lecCode"]);
+		$row = mysql_fetch_row($query);
+		$_SESSION["f_name"] = $row[0];
+		$_SESSION["l_name"] = $row[1];
+	}
+	// ************** 1 - Confirm *****************
+	if(isset($_POST["submit2"]))
+	{
+		$section = 2;
+	}
+	// ************** 2 - Recipt ******************
+	
+	// *****************************************************************	FUNCTIONS	**********************************************************************
+	function removal()
+	{
+		if($query = mysql_query("UPDATE modules SET lecturer_id = NULL WHERE lecturer_id = " . $_SESSION["lecCode"] . " AND mod_code = '" . $_SESSION["modCode"] . "'"))
+		{
+			echo '
+				<div class = "form-group">
+					<h1>
+						' . $_SESSION["l_name"] . ', ' . $_SESSION["f_name"] . ' has been removed from ' . $_SESSION["modCode"] . '
+					</h1>
+				</div>
+				<div class = "form-group">
+					<a href = "adminPage.php">
+						Click here to return to the Administrative Homepage
+					</a>
+				</div>';
+		}
+		else
+		{
+			echo '
+				<div class = "form-group">
+					<h1>
+						Error
+					</h1>
+					<br/>
+					<h3>
+						' . $_SESSION["l_name"] . ', ' . $_SESSION["f_name"] . ' could not be removed from ' . $_SESSION["modCode"] . '
+					</h3>
+				</div>
+				<div class = "form-group">
+					<a href = "adminPage.php">
+						Click here to return to the Administrative Homepage
+					</a>
+				</div>';
+		}
+	}
 ?>
 
 <html>
@@ -52,7 +118,56 @@
                     <div class="col-md-4"></div>
                     <div class="col-md-4">
                         <div class="well well-lg">
-							
+							<?php
+								switch($section)
+								{
+									case 0:
+										echo '
+											<form action="' . $_SERVER["PHP_SELF"] . '" method="post" enctype="multipart/form-data">
+												<div class = "form-group">
+													<label class = "control-label">
+														Select Module
+													</label>
+													<select name = "modOption">';
+														$query = mysql_query("SELECT mod_code FROM modules WHERE lecturer_id IS NOT NULL");
+														while($row = mysql_fetch_array($query))
+														{
+															echo '<option value = "' . $row["mod_code"] . '">' . $row["mod_code"] . '</option>';
+														}
+										echo '		</select>
+												</div>
+												<div class = "form-group">
+													<input type = "submit" name = "submit1" value = "Select"/>
+												</div>
+											</form>';
+										break;
+									case 1:
+										echo '
+											<form action="' . $_SERVER["PHP_SELF"] . '" method="post" enctype="multipart/form-data">
+												<div class = "form-group">
+													<label>
+														Module
+													</label>
+													' . " " . $_SESSION["modCode"] . '
+												</div>
+												<div class = "form-group">
+													<label>
+														Lecturer
+													</label>
+													' . " " . $_SESSION["l_name"] . ", " . $_SESSION["f_name"] . '
+												</div>
+												<div class = "form-group">
+													Are you sure you want to remove this lecturer from this module?
+												</div>
+												<div class = "form-group">
+													<input type = "submit" name = "submit2" value = "Remove"/>
+												</div>
+											</form>';
+										break;
+									case 2:
+										removal();
+								}
+							?>
 						</div>
 					</div>
 				</div>

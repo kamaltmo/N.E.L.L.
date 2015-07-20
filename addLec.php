@@ -152,7 +152,7 @@
 														Select Module
 													</label>
 													<select name = "modOption">';
-														$query = mysql_query("SELECT mod_code FROM modules");
+														$query = mysql_query("SELECT mod_code FROM modules WHERE lecturer_id IS NULL");
 														while($row = mysql_fetch_array($query))
 														{
 															echo '<option value = "' . $row["mod_code"] . '">' . $row["mod_code"] . '</option>';
