@@ -8,7 +8,6 @@
 	//**************************************************************************************************
 	//	JOBS:
 	//		-	Check to see that the person is logged on as admin (under session_starts())
-	//		-	BUG: addNewLec -> adminPage -> addNewM -> addNewLec
 	//		-	Ask if they want to replace the current lecturer if a lecturer already exists
 	//**************************************************************************************************
 	

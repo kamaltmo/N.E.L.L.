@@ -43,15 +43,11 @@
 		$section = 2;
 	}
 	
+	//****************************************************************		FUNCTIONS		***********************************************************
+	
+	// Delete a lecturer that has no modules
 	function removeLecNoMods()
 	{
-		$query = mysql_query("DELETE FROM lecturers WHERE lecturer_id = " . $_SESSION["selectedID"]);
-	}
-	
-	function removeLecWithMods()
-	{
-		$query = mysql_query("UPDATE modules SET lecturer_id = NULL WHERE lecturer_id = " . $_SESSION["selectedID"]);
-		
 		if($query = mysql_query("DELETE FROM lecturers WHERE lecturer_id = " . $_SESSION["selectedID"]))
 		{
 			echo '
@@ -68,18 +64,62 @@
 		}
 		else
 		{
-			
-										echo '
-											<div class = "form-group">
-												<h1>
-													' . $_SESSION["l_name"] . ', ' . $_SESSION["f_name"] . ' has been deleted
-												</h1>
-											</div>
-											<div class = "form-group">
-												<a href = "adminPage.php">
-													Click here to return to the Administrative Homepage
-												</a>
-											</div>';
+			echo '
+				<div class = "form-group">
+					<h1>
+						Error
+					</h1>
+					<br/>
+					<h3>
+						' . $_SESSION["l_name"] . ', ' . $_SESSION["f_name"] . ' could not be deleted
+					</h3>
+				</div>
+				<div class = "form-group">
+					<a href = "adminPage.php">
+						Click here to return to the Administrative Homepage
+					</a>
+				</div>';
+		}
+	}
+	
+	// Delete a lecturer that has some modules
+	function removeLecWithMods()
+	{
+		// STEP 1: Remove all references to the lecturer
+		$query = mysql_query("UPDATE modules SET lecturer_id = NULL WHERE lecturer_id = " . $_SESSION["selectedID"]);
+		
+		// STEP 2: Delete lecturer from the system
+		if($query = mysql_query("DELETE FROM lecturers WHERE lecturer_id = " . $_SESSION["selectedID"]))
+		{
+			echo '
+				<div class = "form-group">
+					<h1>
+						' . $_SESSION["l_name"] . ', ' . $_SESSION["f_name"] . ' has been deleted
+					</h1>
+				</div>
+				<div class = "form-group">
+					<a href = "adminPage.php">
+						Click here to return to the Administrative Homepage
+					</a>
+				</div>';
+		}
+		else
+		{
+			echo '
+				<div class = "form-group">
+					<h1>
+						Error
+					</h1>
+					<br/>
+					<h3>
+						' . $_SESSION["l_name"] . ', ' . $_SESSION["f_name"] . ' could not be deleted
+					</h3>
+				</div>
+				<div class = "form-group">
+					<a href = "adminPage.php">
+						Click here to return to the Administrative Homepage
+					</a>
+				</div>';
 		}
 	}
 ?>
@@ -154,10 +194,9 @@
 										echo				'
 													</label><br/><br/>
 													This lecturer is in charge of<br/>';
-													$query = mysql_query("SELECT mod_code, last_name FROM modules WHERE lecturer_id = " . $_SESSION["selectedID"]);
-													$result = mysql_query($query);
+													$query = mysql_query("SELECT mod_code FROM modules WHERE lecturer_id = " . $_SESSION["selectedID"]);
 													// The lecturer has modules
-													if($result)
+													if(mysql_num_rows($query) > 0)
 													{
 														$_SESSION["mods"] = true;
 														while($row = mysql_fetch_array($query))
@@ -179,10 +218,14 @@
 											</form>';
 										break;
 									case 2:
-										if($_SESSION["mods"])
+										if($_SESSION["mods"] == true)
+										{
 											removeLecWithMods();
+										}
 										else
+										{
 											removeLecNoMods();
+										}
 								}
 							?>
 						</div>
