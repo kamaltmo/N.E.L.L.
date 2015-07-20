@@ -140,6 +140,8 @@
 												answer2 varchar (255),
 												answer3 varchar (255),
 												answer4 varchar (255),
+												answer5 varchar (255),
+												status int NOT NULL DEFAULT 0,
 												PRIMARY KEY (question_id)
 											)") &&
 											$query = mysql_query("CREATE TABLE free_text_questions
@@ -147,6 +149,7 @@
 												question_id int NOT NULL,
 												question varchar (255),
 												answer varchar (255),
+												status int NOT NULL DEFAULT 0,
 												PRIMARY KEY (question_id)
 											)") &&
 											$query = mysql_query("CREATE TABLE queries
