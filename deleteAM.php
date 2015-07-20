@@ -11,8 +11,94 @@
 	//		-	Add a 'Are you sure you want to remove COMPX?' warning message - this is permanent etc.
 	//**************************************************************************************************
 	
+	//**************************************************************************************************
+	//	POSSIBLE ERRORS:
+	//		-	2.1:	Database could not be deleted from the server
+	//		-	2.2:	Module could not be deleted from the 'modules' table in the nell database
+	//**************************************************************************************************
+	
 	session_start();
 	//Check they're logged on etc.
+	
+	$section = 0;
+	
+	define ("DB_HOST", "localhost");
+	define ("DB_USER", "root");
+	define ("DB_PASS", "");
+	define ("DB_NAME", "nell");
+	$link = mysql_connect(DB_HOST, DB_USER, DB_PASS) or die("Couldn't make connection.");
+	$db = mysql_select_db(DB_NAME, $link) or die("Couldn't select database");
+	
+	//*************** 0 - Select module ***************
+	if(isset($_POST["submit1"]))
+	{
+		$section = 1;
+		$_SESSION["modCode"] = $_POST["modOption"];
+	}
+	
+	//*************** 1 - Confirm ***************
+	if(isset($_POST["submit2"]))
+	{
+		$section = 2;	
+	}
+	
+	// *****************************************************************	FUNCTIONS	*****************************************************************
+	function cleanup()
+	{
+		$_SESSION["modCode"] = NULL;
+	}
+	
+	function removal()
+	{
+		global $link;
+		$sql = "DROP DATABASE " . $_SESSION["modCode"];
+		if(mysql_query($sql, $link))
+		{
+			$db = mysql_select_db('nell', $link) or die("Couldn't select database");
+			if(mysql_query("DELETE FROM modules WHERE mod_code = '" . $_SESSION["modCode"] . "'"))
+			{
+				echo '
+					<div class = "form-group">
+						<h1>
+							' . $_SESSION["modCode"] . ' has been deleted
+						</h1>
+					</div>
+					<div class = "form-group">
+						<a href = "adminPage.php">
+							Click here to return to the Administrative Homepage
+						</a>
+					</div>';
+			}
+			else
+			{
+				$code = 2.1;
+				failureMessage($code);
+			}
+		}
+		else
+		{
+			$code = 2.2;
+			failureMessage($code);
+		}
+		//cleanup();
+	}
+	
+	function failureMessage($errorCode)
+	{
+		echo '
+			<div class = "form-group">
+				<h1>
+				Error ' . $errorCode . '
+				</h1>
+				<br/>
+				' . $_SESSION["modCode"] . ' could not be deleted
+			</div>
+			<div class = "form-group">
+				<a href = "adminPage.php">
+					Click here to return to the Administrative Homepage
+				</a>
+			</div>';
+	}
 ?>
 
 <html>
@@ -52,7 +138,52 @@
                     <div class="col-md-4"></div>
                     <div class="col-md-4">
                         <div class="well well-lg">
-							
+							<?php
+								switch($section)
+								{
+									case 0:
+										echo '
+											<form action="' . $_SERVER["PHP_SELF"] . '" method="post" enctype="multipart/form-data">
+												<div class = "form-group">
+													<label class = "control-label">
+														Select Module
+													</label>
+													<select name = "modOption">';
+														$query = mysql_query("SELECT mod_code FROM modules");
+														while($row = mysql_fetch_array($query))
+														{
+															echo '<option value = "' . $row["mod_code"] . '">' . $row["mod_code"] . '</option>';
+														}
+										echo '		</select>
+												</div>
+												<div class = "form-group">
+													<input type = "submit" name = "submit1" value = "Select"/>
+												</div>
+											</form>';
+										break;
+									case 1:
+										echo '
+											<form action="' . $_SERVER["PHP_SELF"] . '" method="post" enctype="multipart/form-data">
+												<div class = "form-group">
+													<label>
+														Module
+													</label>
+													' . " " . $_SESSION["modCode"] . '
+												</div>
+												<div class = "form-group">
+													Are you sure you want to remove this module?
+													<br/>
+													NOTE: This is a permanent alteration and cannot be undone, all data connected with this module will be removed
+												</div>
+												<div class = "form-group">
+													<input type = "submit" name = "submit2" value = "Remove"/>
+												</div>
+											</form>';
+											break;
+										case 2:
+											removal();
+								}
+							?>
 						</div>
 					</div>
 				</div>

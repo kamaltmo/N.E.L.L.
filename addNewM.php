@@ -9,8 +9,14 @@
 	//	JOBS:
 	//		-	Check to see that the person is logged on as admin (under session_starts())
 	//		-	Check to make sure the module code doesn't begin with numbers
-	//		-	Check to see if the module already exists
+	//		-	Check for duplicates
 	//		-	Add 'Cancel' or 'Back' buttons to each page
+	//		-	Redo
+	//**************************************************************************************************
+	
+	//**************************************************************************************************
+	//	POSSIBLE ERRORS:
+	//		-	1:
 	//**************************************************************************************************
 	
 	session_start();

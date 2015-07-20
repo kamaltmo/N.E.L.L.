@@ -23,14 +23,11 @@
 	//Reset all variables
 	$_SESSION["returnToLec"] = NULL;
 	$_SESSION["modCode"] = NULL;
-	$_POST["submit1"] = NULL;
-	$_POST["submit2"] = NULL;
-	$_POST["submit3"] = NULL;
-	$_POST["finalSubmit"] = NULL;
 	$_SESSION["fName"] = NULL;
 	$_SESSION["lName"] = NULL;
 	$_SESSION["email"] = NULL;
 	$_SESSION["lecCode"] = NULL;
+	$_SESSION["selectedID"] = NULL;
 ?>
 
 <html>
@@ -87,6 +84,12 @@
 							</div>
 							<div class = "form-group">
 								<a href = "removeLec.php"> Remove a lecturer from a module </a>
+							</div>
+							<div class = "form-group">
+								<a href = "lecList.php"> View the list of lecturers </a>
+							</div>
+							<div class = "form-group">
+								<a href = "modList.php"> View the list of Modules </a>
 							</div>
 						</div>
 					</div>

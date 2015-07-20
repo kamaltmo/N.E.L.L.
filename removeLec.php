@@ -8,8 +8,12 @@
 	//**************************************************************************************************
 	//	JOBS:
 	//		-	Check to see that the person is logged on as admin (under session_starts())
-	//		-	Only allow mods with lecturers to be displayed as options
 	//		-	Check to see if the lecturer has any other modules, if not offer to delete the lecturer
+	//**************************************************************************************************
+	
+	//**************************************************************************************************
+	//	POSSIBLE ERRORS:
+	//		-	6:	Lecturer could not be removed from the modules table
 	//**************************************************************************************************
 	
 	session_start();
@@ -59,13 +63,14 @@
 						Click here to return to the Administrative Homepage
 					</a>
 				</div>';
+				cleanup();
 		}
 		else
 		{
 			echo '
 				<div class = "form-group">
 					<h1>
-						Error
+						Error 6
 					</h1>
 					<br/>
 					<h3>
@@ -77,7 +82,16 @@
 						Click here to return to the Administrative Homepage
 					</a>
 				</div>';
+				cleanup();
 		}
+	}
+	
+	function cleanup()
+	{
+		$_SESSION["l_name"] = NULL;
+		$_SESSION["f_name"] = NULL;
+		$_SESSION["modCode"] = NULL;
+		$_SESSION["lecCode"] = NULL;
 	}
 ?>
 

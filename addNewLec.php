@@ -8,8 +8,14 @@
 	//**************************************************************************************************
 	//	JOBS:
 	//		-	Check to see that the person is logged on as admin (under session_starts())
+	//		-	Check for duplicates
 	//		-	Add a 'Create a module for this lecturer' option
 	//		-	Add a 'Are you sure you want to remove COMPX?' warning message - this is permanent etc.
+	//**************************************************************************************************
+	
+	//**************************************************************************************************
+	//	POSSIBLE ERRORS:
+	//		-	3:
 	//**************************************************************************************************
 	
 	session_start();
@@ -123,11 +129,7 @@
 							</a>
 						</div>
 					</form>';
-					
-					//Reset
-					$_SESSION["fName"] = NULL;
-					$_SESSION["lName"] = NULL;
-					$_SESSION["email"] = NULL;
+					cleanup();
 			}
 			else
 			{
@@ -161,9 +163,11 @@
 				<form action="addLec.php" method="post" enctype="multipart/form-data">
 					<div class = "form-group">
 						<h1>
-							' . $_SESSION["fName"] . ', ' . $_SESSION["lName"] . ' could not be created<br/>
-							Are you sure they are not already in the Database?
+							Error 3
 						</h1>
+						<br/>
+						' . $_SESSION["fName"] . ', ' . $_SESSION["lName"] . ' could not be created<br/>
+						Are you sure they are not already in the Database?
 					</div>
 					<div class = "form-group">
 						<a href = "adminPage.php">
@@ -171,7 +175,15 @@
 						</a>
 					</div>
 				</form>';
+				cleanup();
 		}
+	}
+	
+	function cleanup()
+	{
+		$_SESSION["fName"] = NULL;
+		$_SESSION["lName"] = NULL;
+		$_SESSION["email"] = NULL;
 	}
 ?>
 

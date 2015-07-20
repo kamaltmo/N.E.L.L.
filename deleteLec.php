@@ -12,6 +12,12 @@
 	//		-	Check to see if the lecturer has any other modules, if not offer to delete the lecturer
 	//**************************************************************************************************
 	
+	//**************************************************************************************************
+	//	POSSIBLE ERRORS:
+	//		-	4.1:	The references to the lecturer on the modules table could not be removed
+	//		-	4.2:	Lecturer could not be deleted from the 'lecturers' table in the nell database
+	//**************************************************************************************************
+	
 	session_start();
 	//Check they're logged on etc.
 	
@@ -64,63 +70,73 @@
 		}
 		else
 		{
-			echo '
-				<div class = "form-group">
-					<h1>
-						Error
-					</h1>
-					<br/>
-					<h3>
-						' . $_SESSION["l_name"] . ', ' . $_SESSION["f_name"] . ' could not be deleted
-					</h3>
-				</div>
-				<div class = "form-group">
-					<a href = "adminPage.php">
-						Click here to return to the Administrative Homepage
-					</a>
-				</div>';
+			$code = 4.2;
+			errorMessage($code);
 		}
+		cleanup();
 	}
 	
 	// Delete a lecturer that has some modules
 	function removeLecWithMods()
 	{
 		// STEP 1: Remove all references to the lecturer
-		$query = mysql_query("UPDATE modules SET lecturer_id = NULL WHERE lecturer_id = " . $_SESSION["selectedID"]);
-		
-		// STEP 2: Delete lecturer from the system
-		if($query = mysql_query("DELETE FROM lecturers WHERE lecturer_id = " . $_SESSION["selectedID"]))
+		if($query = mysql_query("UPDATE modules SET lecturer_id = NULL WHERE lecturer_id = " . $_SESSION["selectedID"]))
 		{
-			echo '
-				<div class = "form-group">
-					<h1>
-						' . $_SESSION["l_name"] . ', ' . $_SESSION["f_name"] . ' has been deleted
-					</h1>
-				</div>
-				<div class = "form-group">
-					<a href = "adminPage.php">
-						Click here to return to the Administrative Homepage
-					</a>
-				</div>';
+			// STEP 2: Delete lecturer from the system
+			if($query = mysql_query("DELETE FROM lecturers WHERE lecturer_id = " . $_SESSION["selectedID"]))
+			{
+				echo '
+					<div class = "form-group">
+						<h1>
+							' . $_SESSION["l_name"] . ', ' . $_SESSION["f_name"] . ' has been deleted
+						</h1>
+					</div>
+					<div class = "form-group">
+						<a href = "adminPage.php">
+							Click here to return to the Administrative Homepage
+						</a>
+					</div>';
+			}
+			else
+			{
+				$code = 4.2;
+				errorMessage($code);
+			}
 		}
 		else
 		{
-			echo '
-				<div class = "form-group">
-					<h1>
-						Error
-					</h1>
-					<br/>
-					<h3>
-						' . $_SESSION["l_name"] . ', ' . $_SESSION["f_name"] . ' could not be deleted
-					</h3>
-				</div>
-				<div class = "form-group">
-					<a href = "adminPage.php">
-						Click here to return to the Administrative Homepage
-					</a>
-				</div>';
+			$code = 4.1;
+			errorMessage($code);
 		}
+		cleanup();
+	}
+	
+	function errorMessage($errorCode)
+	{
+		echo '
+			<div class = "form-group">
+				<h1>
+					Error ' . $errorCode . '
+				</h1>
+				<br/>
+				<h3>
+					' . $_SESSION["l_name"] . ', ' . $_SESSION["f_name"] . ' could not be deleted
+				</h3>
+			</div>
+			<div class = "form-group">
+				<a href = "adminPage.php">
+					Click here to return to the Administrative Homepage
+				</a>
+			</div>';
+		cleanup();
+	}
+	
+	function cleanup()
+	{
+		$_SESSION["f_name"] = NULL;
+		$_SESSION["l_name"] = NULL;
+		$_SESSION["selectedID"] = NULL;
+		$_SESSION["mods"] = NULL;
 	}
 ?>
 

@@ -9,6 +9,12 @@
 	//	JOBS:
 	//		-	Check to see that the person is logged on as admin (under session_starts())
 	//		-	Ask if they want to replace the current lecturer if a lecturer already exists
+	//		-	Redo
+	//**************************************************************************************************
+	
+	//**************************************************************************************************
+	//	POSSIBLE ERRORS:
+	//		-	5:
 	//**************************************************************************************************
 	
 	session_start();
@@ -101,6 +107,12 @@
 	
 	$link = mysql_connect(DB_HOST, DB_USER, DB_PASS) or die("Couldn't make connection.");
 	$db = mysql_select_db(DB_NAME, $link) or die("Couldn't select database");
+	
+	function cleanup()
+	{
+		$_SESSION["returnToLec"] = NULL;
+		$_SESSION["modCode"] = NULL;
+	}
 ?>
 
 <html>
@@ -174,7 +186,7 @@
 														Select a Lecturer for ' . $_SESSION["modCode"] . '
 													</label>
 													<select name = "lecOption">';
-														$query = mysql_query("SELECT first_name, last_name, lecturer_id FROM lecturers");
+														$query = mysql_query("SELECT first_name, last_name, lecturer_id FROM lecturers WHERE lecturer_id != 1");
 														while($row = mysql_fetch_array($query))
 														{
 															echo '<option value = "' . $row["lecturer_id"] . '">' . $row["last_name"] . ', ' . $row["first_name"] . '</option>';
@@ -241,9 +253,7 @@
 													Click here to return to the Administrative Homepage
 												</a>
 											</div>';
-										$_SESSION["returnToLec"] = NULL;
-										$_SESSION["modCode"] = NULL;
-										$_POST["submit1"] = NULL;
+										cleanup();
 								}
 							?>
 						</div>
