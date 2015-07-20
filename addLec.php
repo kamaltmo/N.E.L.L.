@@ -200,7 +200,7 @@
 									// Create a new lecturer
 									case 3:
 										echo '<div class = "form-group">
-											<a href = "addLec.php">
+											<a href = "addNewLec.php">
 												Click here to create a new Lecturer
 											</a>
 										</div>';

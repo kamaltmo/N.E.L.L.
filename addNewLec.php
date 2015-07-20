@@ -74,7 +74,11 @@
 		$section = 3;
 	}
 	
-	// Creates the lecturer in the database
+	//	***************************************
+	//	*									  *
+	//	* Create the lecturer in the database *
+	//	*									  *
+	//	***************************************
 	function createUser()
 	{
 		// Generate Password
