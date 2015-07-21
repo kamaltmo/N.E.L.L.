@@ -8,8 +8,6 @@
 	//**************************************************************************************************
 	//	JOBS:
 	//		-	Check to see that the person is logged on as admin (under session_starts())
-	//		-	A lecturer can only be deleted when there is no module with their id
-	//		-	Check to see if the lecturer has any other modules, if not offer to delete the lecturer
 	//**************************************************************************************************
 	
 	//**************************************************************************************************

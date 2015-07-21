@@ -8,7 +8,6 @@
 	//**************************************************************************************************
 	//	JOBS:
 	//		-	Check to see that the person is logged on as admin (under session_starts())
-	//		-	Add a 'Are you sure you want to remove COMPX?' warning message - this is permanent etc.
 	//**************************************************************************************************
 	
 	//**************************************************************************************************
@@ -80,7 +79,7 @@
 			$code = 2.2;
 			failureMessage($code);
 		}
-		//cleanup();
+		cleanup();
 	}
 	
 	function failureMessage($errorCode)

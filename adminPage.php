@@ -28,6 +28,7 @@
 	$_SESSION["email"] = NULL;
 	$_SESSION["lecCode"] = NULL;
 	$_SESSION["selectedID"] = NULL;
+	$_SESSION["message"] = NULL;
 ?>
 
 <html>

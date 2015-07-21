@@ -8,9 +8,6 @@
 	//**************************************************************************************************
 	//	JOBS:
 	//		-	Check to see that the person is logged on as admin (under session_starts())
-	//		-	Check for duplicates
-	//		-	Add a 'Create a module for this lecturer' option
-	//		-	Add a 'Are you sure you want to remove COMPX?' warning message - this is permanent etc.
 	//**************************************************************************************************
 	
 	//**************************************************************************************************
@@ -104,78 +101,71 @@
 			$exist = $recResult["lecturer_id"];	
 		} while($exist != "");
 		
-		$query = mysql_query("INSERT INTO lecturers (lecturer_id, email, password, first_name, last_name) VALUES ('$id', '".$_SESSION["email"]."', '$password', '".$_SESSION["fName"]."', '".$_SESSION["lName"]."')")or die(mysql_error());
-		
-		if($query)
+		$duplicate = mysql_query("SELECT lecturer_id FROM lecturers WHERE first_name = '" . $_SESSION["fName"] . "' AND last_name = '" . $_SESSION["lName"] . "'");
+		if(mysql_num_rows($duplicate) == 0)
 		{
-			if($_SESSION["returnToLec"] == "")
+			if(mysql_query("INSERT INTO lecturers (lecturer_id, email, password, first_name, last_name) VALUES ('$id', '".$_SESSION["email"]."', '$password', '".$_SESSION["fName"]."', '".$_SESSION["lName"]."')"))
 			{
-				// Success and return to homepage
-				echo '
-					<form action="addLec.php" method="post" enctype="multipart/form-data">
-						<div class = "form-group">
-							<h1>
-								' . $_SESSION["fName"] . ', ' . $_SESSION["lName"] . ' has been added
-							</h1>
-						</div>
-						<div class = "form-group">
-							<label class = "control-label">
-								Add a module for this lecturer?
-							</label>
-							<input type = "submit" name = "fromNLec" value = "Add a Module"/>
-							<br/>
-							<a href = "adminPage.php">
-								Click here to return to the Administrative Homepage
-							</a>
-						</div>
-					</form>';
+				if($_SESSION["returnToLec"] == "")
+				{
+					// Success and return to homepage
+					echo '
+						<form action="addLec.php" method="post" enctype="multipart/form-data">
+							<div class = "form-group">
+								<h1>
+									' . $_SESSION["fName"] . ', ' . $_SESSION["lName"] . ' has been added
+								</h1>
+							</div>
+							<div class = "form-group">
+								<label class = "control-label">
+									Add a module for this lecturer?
+								</label>
+								<input type = "submit" name = "fromNLec" value = "Add a Module"/>
+								<br/>
+								<a href = "adminPage.php">
+									Click here to return to the Administrative Homepage
+								</a>
+							</div>
+						</form>';
 					cleanup();
+				}
+				else
+				{
+					// Success and return to addLec
+					$_SESSION["lecCode"] = $id;
+					echo '
+						<form action="addLec.php" method="post" enctype="multipart/form-data">
+							<div class = "form-group">
+								<h1>
+									' . $_SESSION["fName"] . ', ' . $_SESSION["lName"] . ' has been added
+								</h1>
+							</div>
+							<div class = "form-group">
+								<label class = "control-label">
+									Return to adding to a module?
+								</label>
+								<input type = "submit" name = "fromNLec" value = "Add a Module"/>
+								<br/>
+								<a href = "adminPage.php">
+									Click here to return to the Administrative Homepage
+								</a>
+							</div>
+						</form>';
+				}
 			}
 			else
 			{
-				// Success and return to addLec
+				// Failure
 				$_SESSION["lecCode"] = $id;
-				echo '
-					<form action="addLec.php" method="post" enctype="multipart/form-data">
-						<div class = "form-group">
-							<h1>
-								' . $_SESSION["fName"] . ', ' . $_SESSION["lName"] . ' has been added
-							</h1>
-						</div>
-						<div class = "form-group">
-							<label class = "control-label">
-								Return to adding to a module?
-							</label>
-							<input type = "submit" name = "fromNLec" value = "Add a Module"/>
-							<br/>
-							<a href = "adminPage.php">
-								Click here to return to the Administrative Homepage
-							</a>
-						</div>
-					</form>';
+				$code = 3;
+				errorMessage($code);
+				cleanup();
 			}
 		}
 		else
 		{
-			// Failure
-			$_SESSION["lecCode"] = $id;
-			echo '
-				<form action="addLec.php" method="post" enctype="multipart/form-data">
-					<div class = "form-group">
-						<h1>
-							Error 3
-						</h1>
-						<br/>
-						' . $_SESSION["fName"] . ', ' . $_SESSION["lName"] . ' could not be created<br/>
-						Are you sure they are not already in the Database?
-					</div>
-					<div class = "form-group">
-						<a href = "adminPage.php">
-							Click here to return to the Administrative Homepage
-						</a>
-					</div>
-				</form>';
-				cleanup();
+			$code = 'Lecturer already Exists';
+			errorMessage($code);
 		}
 	}
 	
@@ -184,6 +174,25 @@
 		$_SESSION["fName"] = NULL;
 		$_SESSION["lName"] = NULL;
 		$_SESSION["email"] = NULL;
+	}
+	
+	function errorMessage($errorCode)
+	{
+		echo '
+			<form action="addLec.php" method="post" enctype="multipart/form-data">
+				<div class = "form-group">
+					<h1>
+						Error ' . $errorCode . '
+					</h1>
+					<br/>
+					' . $_SESSION["fName"] . ', ' . $_SESSION["lName"] . ' could not be created<br/>
+				</div>
+				<div class = "form-group">
+					<a href = "adminPage.php">
+						Click here to return to the Administrative Homepage
+					</a>
+				</div>
+			</form>';
 	}
 ?>
 
@@ -236,19 +245,19 @@
 													<label class = "control-label">
 														First Name
 													</label>
-													<input type = "text" name = "fName" autocomplete="off"/>
+													<input type = "text" name = "fName" autocomplete = "off" maxlength = "30"/>
 												</div>
 												<div class = "form-group">
 													<label class = "control-label">
 														Surname 
 													</label>
-													<input type = "text" name = "lName" autocomplete="off"/>
+													<input type = "text" name = "lName" autocomplete="off" maxlength = "30"/>
 												</div>
 												<div class = "form-group">
 													<label class = "control-label">
 														Email Address
 													</label>
-													<input type = "text" name = "email" autocomplete="off"/><br/>
+													<input type = "text" name = "email" autocomplete="off" maxlength = "40"/><br/>
 													A password will be generated and sent to this address<br/>
 												</div>
 												<div class = "form-group">
@@ -265,19 +274,19 @@
 													<label class = "control-label">
 														First Name
 													</label>
-													<input type = "text" name = "fName" value = "' . $_SESSION["fName"] . '" autocomplete="off"/>
+													<input type = "text" name = "fName" value = "' . $_SESSION["fName"] . '" autocomplete="off" maxlength = "30"/>
 												</div>
 												<div class = "form-group">
 													<label class = "control-label">
 														Surname 
 													</label>
-													<input type = "text" name = "lName" value = "' . $_SESSION["lName"] . '" autocomplete="off"/>
+													<input type = "text" name = "lName" value = "' . $_SESSION["lName"] . '" autocomplete="off" maxlength = "30"/>
 												</div>
 												<div class = "form-group">
 													<label class = "control-label">
 														Email Address
 													</label>
-													<input type = "text" name = "email" value = "' . $_SESSION["email"] . '" autocomplete="off"/><br/>
+													<input type = "text" name = "email" value = "' . $_SESSION["email"] . '" autocomplete="off" maxlength = "40"/><br/>
 													A password will be generated and sent to this address<br/>
 												</div>
 												<div class = "form-group">

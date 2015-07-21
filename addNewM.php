@@ -8,15 +8,13 @@
 	//**************************************************************************************************
 	//	JOBS:
 	//		-	Check to see that the person is logged on as admin (under session_starts())
-	//		-	Check to make sure the module code doesn't begin with numbers
-	//		-	Check for duplicates
 	//		-	Add 'Cancel' or 'Back' buttons to each page
 	//		-	Redo
 	//**************************************************************************************************
 	
 	//**************************************************************************************************
 	//	POSSIBLE ERRORS:
-	//		-	1:
+	//		-	1:	Module already exists
 	//**************************************************************************************************
 	
 	session_start();
@@ -34,15 +32,47 @@
 	{
 		if(isset($_POST["modCode"]))
 		{
-			$created = 1;
-			$_SESSION["modCode"] = $_POST["modCode"];
+			if(!(strlen($_POST["modCode"]) > 0 && ctype_digit(substr($_POST["modCode"], 0, 1))))
+			{
+				$created = 1;
+				$_SESSION["modCode"] = $_POST["modCode"];
+			}
+			else
+			{
+				$created = 4;
+			}
 		}
 	}
 	if(isset($_POST["submit2"]))
 	{
-		$created = 2;
-		if(isset($_SESSION["returnToLec"]))
-			$created = 3;
+		$duplicate = mysql_query("SELECT mod_code FROM modules WHERE mod_code = '" . $_SESSION["modCode"] . "'");
+		if(mysql_num_rows($duplicate) == 0)
+		{
+			$created = 2;
+			if(isset($_SESSION["returnToLec"]))
+				$created = 3;
+		}
+		else
+			errorMessage("Module already exists");
+	}
+	
+	function errorMessage($code)
+	{
+		echo '
+			<form action="addLec.php" method="post" enctype="multipart/form-data">
+				<div class = "form-group">
+					<h1>
+						Error ' . $code . '
+					</h1>
+					<br/>
+					' . $_SESSION["modCode"] . ' could not be created<br/>
+				</div>
+				<div class = "form-group">
+					<a href = "adminPage.php">
+						Click here to return to the Administrative Homepage
+					</a>
+				</div>
+			</form>';
 	}
 ?>
 
@@ -94,7 +124,7 @@
 													<label class = "control-label">
 														Module Code
 													</label>
-													<input type = "text" name = "modCode" autocomplete="off"/>
+													<input type = "text" name = "modCode" autocomplete="off" maxlength = "9"/>
 												</div>
 												<div class = "form-group">
 													<input type = "submit" name = "submit1" value = "Create Module"/>
@@ -295,7 +325,22 @@
 														Return to Adding a lecturer
 													</a>
 												</div>';
-										}										
+										}
+										break;
+									case 4:
+										echo'
+											<h3>The module code cannot start with a number</h3>
+											<form action="' . $_SERVER["PHP_SELF"] . '" method="post" enctype="multipart/form-data" autocomplete="off">
+												<div class = "form-group">
+													<label class = "control-label">
+														Module Code
+													</label>
+													<input type = "text" name = "modCode" autocomplete="off" maxlength = "9"/>
+												</div>
+												<div class = "form-group">
+													<input type = "submit" name = "submit1" value = "Create Module"/>
+												</div>
+											</form>';
 								}
 							?>
 						</div>

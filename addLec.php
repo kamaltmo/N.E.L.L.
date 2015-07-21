@@ -8,7 +8,6 @@
 	//**************************************************************************************************
 	//	JOBS:
 	//		-	Check to see that the person is logged on as admin (under session_starts())
-	//		-	Ask if they want to replace the current lecturer if a lecturer already exists
 	//		-	Redo
 	//**************************************************************************************************
 	
@@ -20,10 +19,6 @@
 	session_start();
 	//Check they're logged on etc.
 	
-	// When a clean slate is needed
-	//$_SESSION["returnToLec"] = NULL;
-	//$_SESSION["modCode"] = NULL;
-	//$_POST["submit1"] = NULL;
 	$section = 0;
 	$returnValue = "0";
 	
