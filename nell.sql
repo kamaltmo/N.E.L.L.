@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 17, 2015 at 07:56 PM
+-- Generation Time: Jul 22, 2015 at 12:56 PM
 -- Server version: 5.6.24
 -- PHP Version: 5.6.8
 
@@ -28,6 +28,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE IF NOT EXISTS `lecturers` (
   `lecturer_id` int(9) NOT NULL,
+  `username` varchar(20) CHARACTER SET armscii8 NOT NULL,
   `email` varchar(40) NOT NULL,
   `password` varchar(20) NOT NULL,
   `first_name` varchar(30) NOT NULL,
@@ -38,9 +39,8 @@ CREATE TABLE IF NOT EXISTS `lecturers` (
 -- Dumping data for table `lecturers`
 --
 
-INSERT INTO `lecturers` (`lecturer_id`, `email`, `password`, `first_name`, `last_name`) VALUES
-(1, 'admin', '1234Admin', 'NELL', 'Administrator'),
-(42134, 'ewaf', 'rewhgt', 'cdsssss', 'vaefwe');
+INSERT INTO `lecturers` (`lecturer_id`, `username`, `email`, `password`, `first_name`, `last_name`) VALUES
+(1, 'admin', 'admin', '1234Admin', 'NELL', 'Administrator');
 
 -- --------------------------------------------------------
 
