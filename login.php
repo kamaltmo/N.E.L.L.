@@ -23,7 +23,7 @@
 			header("Location: index.html");
 			$error = "Connection failed: " . $conn->connect_error;
 		} else {
-			$sql = "SELECT * FROM login WHERE username = '$uName' AND password = '$pWord'";
+			$sql = "SELECT * FROM lecturers WHERE username = '$uName' AND password = '$pWord'";
 			$result = $conn->query($sql);
             $conn->close(); 
 
@@ -31,12 +31,18 @@
 					// Initializing Session
 
 					while ($row = $result->fetch_assoc()) { 
-						$_SESSION['login_user']= $row['username']; 
-						$_SESSION['user_group']= $row['Group']; 
+						$_SESSION['login_user'] = $row['username'];  
 					}
 
-					header("location: profile.php");
+					if($_SESSION['login_user'] == "admin") {
+						$_SESSION['admin'] = '1';
+						header("location: adminPage.php");
+					} else {
+						$_SESSION['admin'] = '0';
+						header("location: profile.php");
+					}
     				//Redirect to page on login success
+
 				} else {
 					$error = "Username or Password is invalid";
 				}

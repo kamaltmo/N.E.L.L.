@@ -18,6 +18,11 @@
 	session_start();
 	//Check they're logged on etc.
 	
+	//if lecturer not admin redirect to there page
+	if($_SESSION['admin'] == '0') {
+            header("location: profile.php");
+    }
+	
 	$section = 0;
 	define ("DB_HOST", "localhost");
 	define ("DB_USER", "root");

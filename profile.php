@@ -6,7 +6,6 @@
     //Redirect to page on login success
     } else  {
         $name = $_SESSION['login_user'];
-        $group = $_SESSION['user_group'];
     }
 ?>
 

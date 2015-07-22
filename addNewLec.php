@@ -18,6 +18,12 @@
 	session_start();
 	//Check they're logged on etc.
 	
+	//if lecturer not admin redirect to there page
+	if($_SESSION['admin'] == '0') {
+            header("location: profile.php");
+    }
+
+	
 	define ("DB_HOST", "localhost");
 	define ("DB_USER", "root");
 	define ("DB_PASS", "");
@@ -31,7 +37,18 @@
 	//	  0 - Input Details
 	//***************************
 	if(isset($_POST["submit1"]))
-	{
+	{	
+		if($_POST["uName"] != "")
+		{
+			$_SESSION["uName"] = $_POST["uName"];
+			if($section != 1)
+				$section = 2;
+		}
+		// Display error message
+		else
+		{
+			$section = 1;
+		}
 		if($_POST["fName"] != "")
 		{
 			$_SESSION["fName"] = $_POST["fName"];
@@ -104,7 +121,7 @@
 		$duplicate = mysql_query("SELECT lecturer_id FROM lecturers WHERE first_name = '" . $_SESSION["fName"] . "' AND last_name = '" . $_SESSION["lName"] . "'");
 		if(mysql_num_rows($duplicate) == 0)
 		{
-			if(mysql_query("INSERT INTO lecturers (lecturer_id, email, password, first_name, last_name) VALUES ('$id', '".$_SESSION["email"]."', '$password', '".$_SESSION["fName"]."', '".$_SESSION["lName"]."')"))
+			if(mysql_query("INSERT INTO lecturers (lecturer_id, username, email, password, first_name, last_name) VALUES ('$id', '".$_SESSION["uName"]."', '".$_SESSION["email"]."', '$password', '".$_SESSION["fName"]."', '".$_SESSION["lName"]."')"))
 			{
 				if($_SESSION["returnToLec"] == "")
 				{
@@ -170,7 +187,8 @@
 	}
 	
 	function cleanup()
-	{
+	{	
+		$_SESSION["uName"] = NULL;
 		$_SESSION["fName"] = NULL;
 		$_SESSION["lName"] = NULL;
 		$_SESSION["email"] = NULL;
@@ -243,6 +261,12 @@
 											<form action="' . $_SERVER["PHP_SELF"] . '" method="post" enctype="multipart/form-data" autocomplete="off">
 												<div class = "form-group">
 													<label class = "control-label">
+														Username
+													</label>
+													<input type = "text" name = "uName" autocomplete = "off" maxlength = "20"/>
+												</div>
+												<div class = "form-group">
+													<label class = "control-label">
 														First Name
 													</label>
 													<input type = "text" name = "fName" autocomplete = "off" maxlength = "30"/>
@@ -272,6 +296,12 @@
 											<form action="' . $_SERVER["PHP_SELF"] . '" method="post" enctype="multipart/form-data" autocomplete="off">
 												<div class = "form-group">
 													<label class = "control-label">
+														Username
+													</label>
+													<input type = "text" name = "uName" autocomplete = "off" maxlength = "20"/>
+												</div>
+												<div class = "form-group">
+													<label class = "control-label">
 														First Name
 													</label>
 													<input type = "text" name = "fName" value = "' . $_SESSION["fName"] . '" autocomplete="off" maxlength = "30"/>
@@ -299,6 +329,14 @@
 										echo'
 											<h2>Please Check the Details</h2>
 											<form action="' . $_SERVER["PHP_SELF"] . '" method="post" enctype="multipart/form-data">
+												<div class = "form-group">
+													<label class = "control-label">
+														Username
+													</label>
+												</div>
+												<div class = "form-group">
+													' . $_SESSION["uName"] .'
+												</div>
 												<div class = "form-group">
 													<label class = "control-label">
 														First Name

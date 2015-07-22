@@ -29,6 +29,12 @@
 	$_SESSION["lecCode"] = NULL;
 	$_SESSION["selectedID"] = NULL;
 	$_SESSION["message"] = NULL;
+
+	//if lecturer not admin redirect to there page
+	if($_SESSION['admin'] == '0') {
+            header("location: profile.php");
+    }
+
 ?>
 
 <html>
@@ -55,7 +61,7 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</button>
-					<a class="navbar-brand" href="adminPage.php"><span>N.E.L.L. Admin</span></a>
+					<a class="navbar-brand" href="index.php"><span>N.E.L.L. Admin</span></a>
 				</div>
 				<div class="collapse navbar-collapse" id="navbar-ex-collapse">
 					<ul class="nav navbar-nav navbar-right"></ul>
@@ -93,6 +99,7 @@
 								<a href = "modList.php"> View the list of Modules </a>
 							</div>
 						</div>
+						<a href="logout.php" class="btn btn-block btn-info btn-lg">Log Out</a>
 					</div>
 				</div>
 			</div>

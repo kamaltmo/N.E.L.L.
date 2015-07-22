@@ -1,9 +1,5 @@
 <?php
 	session_start();
-	//Redirect if not logged in or not a admin or teacher
-	if(!isset($_SESSION['login_user']) || ($_SESSION['user_group'] == '3')){
-        header("location: index.php");
-    } else  {
 
 	$uploadStatus = 0;
 
@@ -34,7 +30,7 @@
 		}
 	}
 
-}
+
 ?>
 
 <html>
