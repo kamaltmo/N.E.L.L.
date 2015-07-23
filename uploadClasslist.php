@@ -1,12 +1,13 @@
 <?php
 	//***************************************************************
 	//	JOBS:
-	//		-	add lecturer login
-	//		-	only display modules belonging to logged in lecturer
 	//***************************************************************
 	
 	session_start();
-	//Lecturer login
+	if(!isset($_SESSION['login_user']))
+	{
+		header("location: index.php");
+	}
 	
 	define ("DB_HOST", "localhost");
 	define ("DB_USER", "root");
@@ -14,6 +15,13 @@
 	define ("DB_NAME", "nell");
 	$link = mysql_connect(DB_HOST, DB_USER, DB_PASS) or die("Couldn't make connection.");
 	$db = mysql_select_db(DB_NAME, $link) or die("Couldn't select database");
+	
+	// Make sure the person logged in is a lecturer
+	$query = mysql_query("SELECT lecturer_id FROM lecturers WHERE lecturer_id = " . $_SESSION["userID"]);
+	if(mysql_num_rows($query) == 0)
+	{
+		$section = 4;
+	}
 	
 	$section = 0;
     
@@ -112,7 +120,7 @@
 														Select Module
 													</label>
 													<select name = "modOption">';
-														$query = mysql_query("SELECT mod_code FROM modules");
+														$query = mysql_query("SELECT mod_code FROM modules WHERE lecturer_id = " . $_SESSION["userID"]);
 														while($row = mysql_fetch_array($query))
 														{
 															echo '<option value = "' . $row["mod_code"] . '">' . $row["mod_code"] . '</option>';
@@ -146,7 +154,21 @@
 														echo 	"<center>============================= <br/><b>File Uploaded</b><br/>============================= <br/><b>Do you want to upload the data?<br/><a href='convertClasslist.php'>Click Here</a></b><br/>========================</center>";
 													}
 										echo '
-									</form>';
+											</form>';
+										break;
+									// The person logged in is not a lecturer
+									case 4:
+										echo '
+											<form action="' . $_SERVER["PHP_SELF"] . '" method="post" enctype="multipart/form-data">
+												<div class = "form-group">
+													<h3>
+														You do not have permission to be here
+													</h3>
+												</div>
+												<div class = "form-group">
+													<input type = "submit" name = "submit1" value = "Select"/>
+												</div>
+											</form>';
 								}
 								?>
 							<script type="text/javascript">

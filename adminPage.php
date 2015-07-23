@@ -12,13 +12,22 @@
 	
 	//**************************************************************************************************
 	//	JOBS:
-	//		-	Check to see that the person is logged on as admin (under session_starts())
 	//		-	Add option and pages to add / delete lecturers
 	//		-	Split options into two groups: Module Info and Lecturer (maybe display in a table)
 	//**************************************************************************************************
 	
 	session_start();
-	//Check they're logged on etc.
+	if(isset($_SESSION['login_user']))
+	{
+		if($_SESSION['admin'] == '0') 
+		{
+					header("location: profile.php");
+		}
+	} 
+	else 
+	{
+		header("location: index.php");
+	}
 	
 	//Reset all variables
 	$_SESSION["returnToLec"] = NULL;

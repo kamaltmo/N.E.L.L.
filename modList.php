@@ -6,7 +6,17 @@
 	*/
 	
 	session_start();
-	//Check they're logged on etc.
+	if(isset($_SESSION['login_user']))
+	{
+		if($_SESSION['admin'] == '0') 
+		{
+					header("location: profile.php");
+		}
+	} 
+	else 
+	{
+		header("location: index.php");
+	}
 	
 	//if lecturer not admin redirect to there page
 	if(isset($_SESSION['login_user'])){
