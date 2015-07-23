@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 22, 2015 at 08:11 PM
+-- Generation Time: Jul 23, 2015 at 05:06 PM
 -- Server version: 5.6.24
 -- PHP Version: 5.6.8
 
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS `glossary` (
   `term_id` int(11) NOT NULL,
   `term` varchar(255) DEFAULT NULL,
   `definition` varchar(500) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -58,7 +58,14 @@ CREATE TABLE IF NOT EXISTS `multi_questions` (
   `answer2` varchar(255) DEFAULT NULL,
   `answer3` varchar(255) DEFAULT NULL,
   `answer4` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `multi_questions`
+--
+
+INSERT INTO `multi_questions` (`question_id`, `question`, `hint`, `answer1`, `answer2`, `answer3`, `answer4`) VALUES
+(2, 'Is this a test ?', 'Think', 'yes', 'no', 'maybe', 'HELP');
 
 -- --------------------------------------------------------
 
@@ -124,10 +131,15 @@ ALTER TABLE `students`
 --
 
 --
+-- AUTO_INCREMENT for table `glossary`
+--
+ALTER TABLE `glossary`
+  MODIFY `term_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
+--
 -- AUTO_INCREMENT for table `multi_questions`
 --
 ALTER TABLE `multi_questions`
-  MODIFY `question_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=12;
+  MODIFY `question_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 -- Constraints for dumped tables
 --
