@@ -1,8 +1,12 @@
 <?php
     session_start();
     //Redirect if not logged in or not a admin or teacher
+    if(!isset($_SESSION['login_user'])){
+        header("location: index.php");
+    }
 
     $module = $_GET["mod"];
+    $_SESSION['module'] = $module;
     $uploadStatus = 0;
 
     //If no module selected
@@ -178,30 +182,32 @@
               <div class="col-md-12">
                 <h2>Term Info</h2>
                 <div class="row" id= "term1">
+                  <form class="form-horizontal" role="form" title="definition" method="POST" action="submitGlossary.php">
                   <div class="col-md-3">
-                    <form class="form-horizontal" role="form">
+                    
                       <div class="form-group">
                         <div class="col-sm-2">
-                          <label for="CorrectAns" class="control-label">Term</label>
+                          <label for="CorrectAns" class="control-label" >Term</label>
                         </div>
                         <div class="col-sm-10">
-                          <input type="text" class="form-control" id="CorrectAns" placeholder="Term">
+                          <input type="text" class="form-control" id="Term" name="Term" placeholder="Term" title="info">
                         </div>
                       </div>
-                    </form>
+
                   </div>
                   <div class="col-md-9">
-                    <form class="form-horizontal" role="form">
+
                       <div class="form-group">
                         <div class="col-sm-2">
                           <label for="CorrectAns" class="control-label">Definition</label>
                         </div>
                         <div class="col-sm-10">
-                          <input type="text" class="form-control" id="CorrectAns" placeholder="Definition">
+                          <input type="text" class="form-control" id="Definition" name="Definition" placeholder="Definition" title="info">
                         </div>
                       </div>
-                    </form>
+
                   </div>
+                </form>
                 </div>
               </div>
               <table class="table table-bordered table-hover table-striped" id="inputTable1">
@@ -220,7 +226,7 @@
             <a class="btn btn-info btn-lg" id="newTerm">Add Term</a>
           </div>
           <div class="col-md-6">
-            <a class="btn btn-info btn-lg" onclick="">Submit</a>
+            <a class="btn btn-info btn-lg" id="addSubmit">Submit</a>
           </div>
         </div>
       </div>
@@ -235,59 +241,45 @@
                   <label class="control-label">Select Term</label>
                 </div>
                 <div class="col-sm-10">
-                  <select class="form-control"></select>
+                  <select class="form-control" onchange="showTerm(this.value)">
+
+                    <?php
+                    echo '<option>Select A Term</option>';
+                    // Fetch all the questions for the current module
+                    // Create connection
+                    $conn = new mysqli($servername, $username, $password, $module);
+                    // Check connection
+                    if ($conn->connect_error) {
+                        header("Location: index.html");
+                        $error = "Connection failed: " . $conn->connect_error;
+                    } else {
+                        $sql = "SELECT * FROM glossary";
+                        $result = $conn->query($sql);
+                        $conn->close();
+
+                        if ($result->num_rows >= 1) {
+                        // Initializing Session
+                            while ($row = $result->fetch_assoc()) { 
+                                echo '<option value='.$row["term_id"].'>'.$row['term_id']." - ".$row['term']."</option>";   
+                            }
+
+                        }
+                    }
+                    ?>
+
+                  </select>
                 </div>
               </div>
             </form>
-            <div class="col-md-12">
-              <div class="text-left well" id="question1">
-                <div class="col-md-12">
-                  <h2>Term Info</h2>
-                  <div class="row">
-                    <div class="col-md-3">
-                      <form class="form-horizontal" role="form">
-                        <div class="form-group">
-                          <div class="col-sm-2">
-                            <label for="CorrectAns" class="control-label">Term</label>
-                          </div>
-                          <div class="col-sm-10">
-                            <input type="text" class="form-control" id="CorrectAns" placeholder="Term">
-                          </div>
-                        </div>
-                      </form>
-                    </div>
-                    <div class="col-md-9">
-                      <form class="form-horizontal" role="form">
-                        <div class="form-group">
-                          <div class="col-sm-2">
-                            <label for="CorrectAns" class="control-label">Definition</label>
-                          </div>
-                          <div class="col-sm-10">
-                            <input type="text" class="form-control" id="CorrectAns" placeholder="Definition">
-                          </div>
-                        </div>
-                      </form>
-                    </div>
-                  </div>
-                </div>
-                <table class="table table-bordered table-hover table-striped" id="inputTable1">
-                  <thead>
-                    <tr></tr>
-                  </thead>
-                  <tbody>
-                    <tr></tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
+            <div id="txtHint"><b>Term info will be listed here...</b></div>
           </div>
         </div>
         <div class="row">
           <div class="col-md-6">
-            <a class="btn btn-info btn-lg" id="updateTerm">Update Term</a>
+            <a class="btn btn-info btn-lg" id="updateTerm" onclick="updateTerm()">Update Term</a>
           </div>
           <div class="col-md-6">
-            <a class="btn btn-info btn-lg" onclick="">Delete Term</a>
+            <a class="btn btn-info btn-lg" onclick="deleteTerm()">Delete Term</a>
           </div>
         </div>
       </div>
@@ -332,7 +324,79 @@
             $("#newTerm").click(function() {
                 $("#term1").clone().attr("id", "term" + clone++).insertAfter("#term" + (clone - 2));
             });
+
+            //Add function, adds all questions to the database
+            $("#addSubmit").click(function() {
+                //check if the fields have all been filled
+                var complete = true
+                $('[title="definition"]').each(function() {
+                    $('[title="info"]').each(function() {
+                        if($(this).val() == "") {
+                            alert("Please Fill In All The Available Fields");
+                            complete = false
+                            return false;
+                        }
+                    });
+                }); 
+
+                //Submits each term as a separate form
+                if (complete) {
+                    $('[title="definition"]').each(function() {
+
+                        //use ajax to submit each term to the database
+                        var data = $(this).serializeArray()
+                        var URL = $(this).attr("action");
+                        $.post(URL, data,
+                            function(data, textStatus, jqXHR) {
+                                //data: Data from server.    
+                            }).done(function() {
+                            }).fail(function(jqXHR, textStatus, errorThrown) {
+                                alert("Failed To submit terms");
+                                complete = false;
+                            });
+                    });
+
+                    if (complete) {
+                        alert("All terms submitted successfully");
+                    } 
+                }
+            });
+
         });
+  
+        //Request question info
+        function showTerm(str) {
+            if (str == "") {
+                document.getElementById("txtHint").innerHTML = "";
+                return;
+            } else { 
+                if (window.XMLHttpRequest) {
+                    // code for IE7+, Firefox, Chrome, Opera, Safari
+                    xmlhttp = new XMLHttpRequest();
+                } else {
+                    // code for IE6, IE5
+                    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+                }
+                xmlhttp.onreadystatechange = function() {
+                    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                        document.getElementById("txtHint").innerHTML = xmlhttp.responseText;
+                    }
+                }
+                xmlhttp.open("POST","getTermInfo.php",true);
+                xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+                xmlhttp.send("tID="+str);
+            }
+        }
+
+        function deleteTerm() {
+            document.getElementById("updateTermForm").action = "deleteTerm.php";
+            document.getElementById("updateTermForm").submit();
+        }
+
+        function updateTerm() {
+            document.getElementById("updateTermForm").action = "updateTerm.php";
+            document.getElementById("updateTermForm").submit();
+        }
 
     </script>
 

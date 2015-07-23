@@ -1,6 +1,10 @@
 <?php
     session_start();
     //Redirect if not logged in or not a admin or teacher
+    if(!isset($_SESSION['login_user'])){
+        header("location: index.php");
+    }
+
     $module = $_GET["mod"];
     $_SESSION['module'] = $module;
     $uploadStatus = 0;
@@ -263,7 +267,7 @@
                                     <label class="control-label">Select Question</label>
                                 </div>
                                 <div class="col-sm-10">
-                                    <select class="form-control" id="queSelect">
+                                    <select class="form-control" id="queSelect" onchange="showQuestion(this.value)">
 
                                         <?php
                                         echo '<option>Select A Question</option>';
@@ -282,11 +286,9 @@
                                             if ($result->num_rows >= 1) {
                                             // Initializing Session
                                                 while ($row = $result->fetch_assoc()) { 
-                                                    echo '<option value=$row["question_id"]>'.$row['question_id']." - ".$row['question']."</option>";   
+                                                    echo '<option value='.$row["question_id"].'>'.$row['question_id']." - ".$row['question']."</option>";   
                                                 }
 
-                                            } else {
-                                                echo '<option>No questions available</option>';
                                             }
 
                                         }
@@ -296,78 +298,15 @@
                                 </div>
                             </div>
                         </form>
-                        <div class="text-left well" id="test1">
-                            <div class="col-md-12">
-                                <h2>Question Info</h2>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <form role="form" action="" method="post">
-                                            <div class="form-group">
-                                                <label class="control-label">Question</label>
-                                                <input class="form-control input-sm" type="text" id="questionName"
-                                                name="questionName">
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="control-label" contenteditable="true">Hint</label>
-                                                <textarea class="form-control" id="questionHint" name="questionHint"></textarea>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <form class="form-horizontal" role="form">
-                                            <div class="form-group has-success">
-                                                <div class="col-sm-2">
-                                                    <label for="CorrectAns" class="control-label">Correct Answer</label>
-                                                </div>
-                                                <div class="col-sm-10">
-                                                    <input type="text" class="form-control" id="CorrectAns" placeholder="Answer">
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="col-sm-2">
-                                                    <label for="otherAns1" class="control-label">Possible Answer</label>
-                                                </div>
-                                                <div class="col-sm-10">
-                                                    <input type="text" class="form-control" id="otherAns1" placeholder="Answer">
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="col-sm-2">
-                                                    <label for="otherAns2" class="control-label">Possible Answer</label>
-                                                </div>
-                                                <div class="col-sm-10">
-                                                    <input type="text" class="form-control" id="otherAns2" placeholder="Answer">
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="col-sm-2">
-                                                    <label for="otherAns3" class="control-label">Possible Answer</label>
-                                                </div>
-                                                <div class="col-sm-10">
-                                                    <input type="text" class="form-control" id="otherAns3" placeholder="Answer">
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                            <table class="table table-bordered table-hover table-striped" id="inputTable1">
-                                <thead>
-                                    <tr></tr>
-                                </thead>
-                                <tbody>
-                                    <tr></tr>
-                                </tbody>
-                            </table>
-                        </div>
+                        <div id="txtHint"><b>Question info will be listed here...</b></div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <a class="btn btn-info btn-lg" id="update Question">Update Question</a>
+                        <a class="btn btn-info btn-lg" id="update Question" onclick="updateQue()">Update Question</a>
                     </div>
                     <div class="col-md-6">
-                        <a class="btn btn-info btn-lg" onclick="">Delete Question</a>
+                        <a class="btn btn-info btn-lg" onclick="deleteQue()">Delete Question</a>
                     </div>
                 </div>
             </div>
@@ -408,14 +347,14 @@
                 $("#UpdateSection").hide();
             });
 
-            $('#queSelect').change(getDropdownInfo);
-
             var clone = 2;
             $("#newquestion").click(function() {
                 $("#question1").clone().attr("id", "question" + clone++).insertAfter("#question" + (clone - 2));
             });
 
+            //Add function, adds all questions to the database
             $("#addSubmit").click(function() {
+                //check if the fields have all been filled
                 var complete = true
                 $('[title="question"]').each(function() {
                     $('[title="questionInfo"]').each(function() {
@@ -427,6 +366,7 @@
                     });
                 }); 
 
+                //Submits each question as a separate form
                 if (complete) {
                     $('[title="question"]').each(function() {
 
@@ -449,22 +389,39 @@
                 }
             });
         });
-    
-        function getDropdownInfo() {
-            var val = $(this).val();
-            // fire a POST request to populate
-            if(val != "Select A Question") {
-                $.ajax({
-                    type: "POST",
-                    url: "getQuestionInfo.php",
-                    data: 'questionID:' + val,
-                    dataType: "json", // Set the data type so jQuery can parse it for you
-                    success: function (data) {
-                        document.getElementById("#questionName").value ="g";
+        
+        //Request question info
+        function showQuestion(str) {
+            if (str == "") {
+                document.getElementById("txtHint").innerHTML = "";
+                return;
+            } else { 
+                if (window.XMLHttpRequest) {
+                    // code for IE7+, Firefox, Chrome, Opera, Safari
+                    xmlhttp = new XMLHttpRequest();
+                } else {
+                    // code for IE6, IE5
+                    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+                }
+                xmlhttp.onreadystatechange = function() {
+                    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                        document.getElementById("txtHint").innerHTML = xmlhttp.responseText;
                     }
-                });
+                }
+                xmlhttp.open("POST","getQuestionInfo.php",true);
+                xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+                xmlhttp.send("q="+str);
             }
-            
+        }
+
+        function deleteQue() {
+            document.getElementById("updateQuestionForm").action = "deleteQuestion.php";
+            document.getElementById("updateQuestionForm").submit();
+        }
+
+        function updateQue() {
+            document.getElementById("updateQuestionForm").action = "updateQuestion.php";
+            document.getElementById("updateQuestionForm").submit();
         }
 
     </script>
