@@ -2,7 +2,36 @@
     session_start();
     //Redirect if not logged in or not a admin or teacher
 
+    $module = $_GET["mod"];
     $uploadStatus = 0;
+
+    //If no module selected
+    if(!isset($module)) {
+        header("location: profile.php");
+    } else {
+        //check that lecturer has access to this module
+        $servername = "localhost";
+        $username = "root";
+        $password = "";
+        $dbname = "nell";
+
+        // Create connection
+        $conn = new mysqli($servername, $username, $password, $dbname);
+        // Check connection
+        if ($conn->connect_error) {
+            header("Location: index.html");
+            $error = "Connection failed: " . $conn->connect_error;
+        } else {
+            $sql = "SELECT * FROM modules WHERE mod_code = '$module' AND lecturer_id =". $_SESSION['userID'];
+            $result = $conn->query($sql);
+            $conn->close(); 
+
+                if (!($result->num_rows == 1)) {
+                    //Does not have access to this page
+                    header("location: profile.php");
+                }
+        }
+    }
 
     if(isset($_POST["submit"]))
     {
@@ -68,7 +97,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="jumbotron">
-                            <h1>Glossary Creator</h1>
+                            <h1><b><?php echo $module ?></b> Glossary Creator</h1>
                             <p>Add terms you would like to use during this module here. There are
                                 two ways to add terms you may either enter them using the web interface
                                 or upload them in an exel file using the provided template.</p>

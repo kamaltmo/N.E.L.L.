@@ -31,7 +31,9 @@
 					// Initializing Session
 
 					while ($row = $result->fetch_assoc()) { 
-						$_SESSION['login_user'] = $row['username'];  
+						$_SESSION['name'] = $row['first_name'];
+						$_SESSION['login_user'] = $row['username'];
+						$_SESSION['userID'] = $row['lecturer_id'];    
 					}
 
 					if($_SESSION['login_user'] == "admin") {

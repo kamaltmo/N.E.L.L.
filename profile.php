@@ -5,8 +5,17 @@
         header("location: index.php");
     //Redirect to page on login success
     } else  {
-        $name = $_SESSION['login_user'];
+        $name = $_SESSION['name'];
+        $uName = $_SESSION['login_user'];
+        $id = $_SESSION['userID'];
     }
+
+
+    $servername = "localhost";
+    $username = "root";
+    $password = "";
+    $dbname = "nell";
+
 ?>
 
 <!DOCTYPE html>
@@ -44,11 +53,51 @@
             <div class="container">
                 <div class="row">
                 <div class="col-md-4">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                        <div class="col-sm-2">
+                            <label class="control-label">Select Module</label>
+                        </div>
+                        <div class="col-sm-10">
+                            <select class="form-control" id="modCode" onchange= "setMod()">
+
+                                <?php 
+
+                                // Create connection
+                                $conn = new mysqli($servername, $username, $password, $dbname);
+                                // Check connection
+                                if ($conn->connect_error) {
+                                    header("Location: index.html");
+                                    $error = "Connection failed: " . $conn->connect_error;
+                                } else {
+                                    $sql = "SELECT * FROM modules WHERE lecturer_id = '$id'";
+                                    $result = $conn->query($sql);
+                                    $conn->close();
+
+                                    if ($result->num_rows >= 1) {
+                                    // Initializing Session
+
+                                        while ($row = $result->fetch_assoc()) { 
+                                            echo "<option>".$row['mod_code']."</option>";   
+                                        }
+
+                                    } else {
+                                        echo '<option>No Modules available</option>';
+                                    }
+
+                                }
+                                ?>
+                            </select>
+                            </div>
+                        </div>
+                    </form>
+                    <div class= well>
                     <ul class="nav nav-pills nav-stacked lead list-group text-info">
-                        <li ><a href="uploadExcel.php">Upload Student Information</a></li>
-                        <li ><a href="uploadExcelQuestions.php">Upload Questions</a></li>
-                        <li ><a href="uploadExcelGlossary.php">Upload Glossary</a></li>
+                        <li ><a id="uploadStdInfo" href="uploadExcel.php">Upload Student Information</a></li>
+                        <li ><a id="queCreator" href="questionCreator.php">Questions Creator</a></li>
+                        <li ><a id="gloCreator" href="glossaryCreator.php">Glossary Creator</a></li>
                     </ul>
+                </div>
                 </div>
                     <div class="col-md-4">
                         <div class="alert alert-dismissable alert-success">
@@ -63,5 +112,21 @@
             </div>
         </div>
     </body>
+    <script type="text/javascript">
+        //Sets get value of links to first module
+        var mod = document.getElementById("modCode").value;
+        document.getElementById("uploadStdInfo").setAttribute("href", "uploadExcel.php?mod=" +mod);
+        document.getElementById("queCreator").setAttribute("href", "questionCreator.php?mod="+mod);
+        document.getElementById("gloCreator").setAttribute("href", "glossaryCreator.php?mod="+mod);
+
+        //Sets get value of links to selected module
+        function setMod() {
+            var mod = document.getElementById("modCode").value;
+            document.getElementById("uploadStdInfo").setAttribute("href", "uploadExcel.php?mod=" +mod);
+            document.getElementById("queCreator").setAttribute("href", "questionCreator.php?mod="+mod);
+            document.getElementById("gloCreator").setAttribute("href", "glossaryCreator.php?mod="+mod);
+        }
+
+    </script>
 
 </html>

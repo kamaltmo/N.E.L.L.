@@ -1,11 +1,37 @@
 <?php
     session_start();
     //Redirect if not logged in or not a admin or teacher
-    if(!isset($_SESSION['login_user']) || ($_SESSION['user_group'] == '3')){
-        header("location: index.php");
-    } else  {
-
+    $module = $_GET["mod"];
+    $_SESSION['module'] = $module;
     $uploadStatus = 0;
+
+    //If no module selected
+    if(!isset($module)) {
+        header("location: profile.php");
+    } else {
+        //check that lecturer has access to this module
+        $servername = "localhost";
+        $username = "root";
+        $password = "";
+        $dbname = "nell";
+
+        // Create connection
+        $conn = new mysqli($servername, $username, $password, $dbname);
+        // Check connection
+        if ($conn->connect_error) {
+            header("Location: index.html");
+            $error = "Connection failed: " . $conn->connect_error;
+        } else {
+            $sql = "SELECT * FROM modules WHERE mod_code = '$module' AND lecturer_id =". $_SESSION['userID'];
+            $result = $conn->query($sql);
+            $conn->close(); 
+
+                if (!($result->num_rows == 1)) {
+                    //Does not have access to this page
+                    header("location: profile.php");
+                }
+            }
+        }
 
     if(isset($_POST["submit"]))
     {
@@ -34,7 +60,6 @@
         }
     }
 
-}
 ?>
 
 <html>
@@ -72,7 +97,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="jumbotron">
-                            <h1>Question Creator</h1>
+                            <h1><b><?php echo $module ?></b> Question Creator</h1>
                             <p>Add questions you would like to use during this module here. There are
                                 two ways to add question you may either enter them using the web interface
                                 or upload them in an exel file using the provided template.</p>
@@ -150,30 +175,31 @@
                 <div class="row">
                     <div class="col-md-12">
                         <h2>Question Info</h2>
-                        <div class="text-left well" id="question1">
+                        <form class="form-horizontal" role="form" method="POST" id="question1" title="question" action="submitQuestion.php">
+                        <div class="text-left well" >
                             <div class="col-md-12">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <form role="form" action="" method="post">
+
                                             <div class="form-group">
                                                 <label class="control-label">Question</label>
                                                 <input class="form-control input-sm" type="text" id="questionName"
-                                                name="questionName">
+                                                name="questionName" title= "questionInfo">
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label" contenteditable="true">Hint</label>
-                                                <textarea class="form-control" id="questionHint" name="questionHint"></textarea>
+                                                <textarea class="form-control" id="questionHint" name="questionHint" title= "questionInfo"></textarea>
                                             </div>
-                                        </form>
+
                                     </div>
                                     <div class="col-md-8">
-                                        <form class="form-horizontal" role="form">
+
                                             <div class="form-group has-success">
                                                 <div class="col-sm-2">
                                                     <label for="CorrectAns" class="control-label">Correct Answer</label>
                                                 </div>
                                                 <div class="col-sm-10">
-                                                    <input type="text" class="form-control" id="CorrectAns" placeholder="Answer">
+                                                    <input type="text" class="form-control" id="CorrectAns" name = "CorrectAns" placeholder="Answer" title= "questionInfo">
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -181,7 +207,7 @@
                                                     <label for="otherAns1" class="control-label">Possible Answer</label>
                                                 </div>
                                                 <div class="col-sm-10">
-                                                    <input type="text" class="form-control" id="otherAns1" placeholder="Answer">
+                                                    <input type="text" class="form-control" id="otherAns1" name = "otherAns1"  placeholder="Answer" title= "questionInfo">
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -189,7 +215,7 @@
                                                     <label for="otherAns2" class="control-label">Possible Answer</label>
                                                 </div>
                                                 <div class="col-sm-10">
-                                                    <input type="text" class="form-control" id="otherAns2" placeholder="Answer">
+                                                    <input type="text" class="form-control" id="otherAns2" name = "otherAns2" placeholder="Answer" title= "questionInfo">
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -197,13 +223,14 @@
                                                     <label for="otherAns3" class="control-label">Possible Answer</label>
                                                 </div>
                                                 <div class="col-sm-10">
-                                                    <input type="text" class="form-control" id="otherAns3" placeholder="Answer">
+                                                    <input type="text" class="form-control" id="otherAns3" name = "otherAns3" placeholder="Answer" title= "questionInfo">
                                                 </div>
                                             </div>
-                                        </form>
+                                        
                                     </div>
                                 </div>
                             </div>
+                            
                             <table class="table table-bordered table-hover table-striped" id="inputTable1">
                                 <thead>
                                     <tr></tr>
@@ -213,6 +240,7 @@
                                 </tbody>
                             </table>
                         </div>
+                        </form>
                     </div>
                 </div>
                 <div class="row">
@@ -220,7 +248,7 @@
                         <a class="btn btn-info btn-lg" id="newquestion">Add Question</a>
                     </div>
                     <div class="col-md-6">
-                        <a class="btn btn-info btn-lg" onclick="">Submit</a>
+                        <a class="btn btn-info btn-lg" id="addSubmit">Submit</a>
                     </div>
                 </div>
             </div>
@@ -235,7 +263,36 @@
                                     <label class="control-label">Select Question</label>
                                 </div>
                                 <div class="col-sm-10">
-                                    <select class="form-control"></select>
+                                    <select class="form-control" id="queSelect">
+
+                                        <?php
+                                        echo '<option>Select A Question</option>';
+                                        // Fetch all the questions for the current module
+                                        // Create connection
+                                        $conn = new mysqli($servername, $username, $password, $module);
+                                        // Check connection
+                                        if ($conn->connect_error) {
+                                            header("Location: index.html");
+                                            $error = "Connection failed: " . $conn->connect_error;
+                                        } else {
+                                            $sql = "SELECT * FROM multi_questions";
+                                            $result = $conn->query($sql);
+                                            $conn->close();
+
+                                            if ($result->num_rows >= 1) {
+                                            // Initializing Session
+                                                while ($row = $result->fetch_assoc()) { 
+                                                    echo '<option value=$row["question_id"]>'.$row['question_id']." - ".$row['question']."</option>";   
+                                                }
+
+                                            } else {
+                                                echo '<option>No questions available</option>';
+                                            }
+
+                                        }
+                                        ?>
+
+                                    </select>
                                 </div>
                             </div>
                         </form>
@@ -351,11 +408,64 @@
                 $("#UpdateSection").hide();
             });
 
+            $('#queSelect').change(getDropdownInfo);
+
             var clone = 2;
             $("#newquestion").click(function() {
                 $("#question1").clone().attr("id", "question" + clone++).insertAfter("#question" + (clone - 2));
             });
+
+            $("#addSubmit").click(function() {
+                var complete = true
+                $('[title="question"]').each(function() {
+                    $('[title="questionInfo"]').each(function() {
+                        if($(this).val() == "") {
+                            alert("Please Fill In All The Available Fields");
+                            complete = false
+                            return false;
+                        }
+                    });
+                }); 
+
+                if (complete) {
+                    $('[title="question"]').each(function() {
+
+                        //use ajax to submit each question to the database
+                        var data = $(this).serializeArray()
+                        var URL = $(this).attr("action");
+                        $.post(URL, data,
+                            function(data, textStatus, jqXHR) {
+                                //data: Data from server.    
+                            }).done(function() {
+                            }).fail(function(jqXHR, textStatus, errorThrown) {
+                                alert("Failed To submit questions");
+                                complete = false;
+                            });
+                    });
+
+                    if (complete) {
+                        alert("All Questions submitted successfully");
+                    } 
+                }
+            });
         });
+    
+        function getDropdownInfo() {
+            var val = $(this).val();
+            // fire a POST request to populate
+            if(val != "Select A Question") {
+                $.ajax({
+                    type: "POST",
+                    url: "getQuestionInfo.php",
+                    data: 'questionID:' + val,
+                    dataType: "json", // Set the data type so jQuery can parse it for you
+                    success: function (data) {
+                        document.getElementById("#questionName").value ="g";
+                    }
+                });
+            }
+            
+        }
 
     </script>
 
