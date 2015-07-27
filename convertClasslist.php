@@ -95,7 +95,8 @@
 										{
 											$id = $row->childNodes->item(0)->textContent;
 											$fullName = $row->childNodes->item(2)->textContent;
-											$email = $row->childNodes->item(4)->textContent;
+											$email = strtolower($row->childNodes->item(4)->textContent);
+											// Split the name into last name, first name
 											$commaPosition = strpos($fullName, ',');
 											if($commaPosition === false)
 											{

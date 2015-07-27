@@ -88,7 +88,7 @@
 		}
 		if($_POST["email"] != "")
 		{
-			$_SESSION["email"] = $_POST["email"];
+			$_SESSION["email"] = strtolower($_POST["email"]);
 			if($section != 1)
 				$section = 2;
 		}
