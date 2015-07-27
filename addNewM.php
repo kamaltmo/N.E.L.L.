@@ -177,6 +177,7 @@
 												password varchar (255),
 												first_name varchar (20),
 												last_name varchar (30),
+												attendance int (1) NOT NULL DEFAULT 0,
 												PRIMARY KEY (student_id)
 											)") &&
 											$query = mysql_query("CREATE TABLE glossary

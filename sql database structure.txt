@@ -16,6 +16,7 @@ COMPX:
 		password
 		first_name
 		last_name
+		attendance										//New 
 	glossary:
 		term_id (PRIMARY)
 		term
