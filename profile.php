@@ -115,7 +115,7 @@
     <script type="text/javascript">
         //Sets get value of links to first module
         var mod = document.getElementById("modCode").value;
-        document.getElementById("uploadStdInfo").setAttribute("href", "uploadExcel.php?mod=" +mod);
+        document.getElementById("uploadStdInfo").setAttribute("href", "uploadClasslist.php?mod=" +mod);
         document.getElementById("queCreator").setAttribute("href", "questionCreator.php?mod="+mod);
         document.getElementById("gloCreator").setAttribute("href", "glossaryCreator.php?mod="+mod);
 

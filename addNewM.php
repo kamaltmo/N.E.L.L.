@@ -185,6 +185,7 @@
 												term_id int NOT NULL,
 												term varchar (255),
 												definition varchar (500),
+												status int NOT NULL DEFAULT 0,
 												PRIMARY KEY (term_id)
 											)") &&
 											$query = mysql_query("CREATE TABLE multi_questions
@@ -196,7 +197,10 @@
 												answer3 varchar (255),
 												answer4 varchar (255),
 												answer5 varchar (255),
+												answer6 varchar (255),
+												hint varchar (255),
 												status int NOT NULL DEFAULT 0,
+												no_of_answers INT (1) NOT NULL DEFAULT 0,
 												PRIMARY KEY (question_id)
 											)") &&
 											$query = mysql_query("CREATE TABLE free_text_questions

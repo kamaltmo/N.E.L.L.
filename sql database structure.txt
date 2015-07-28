@@ -16,11 +16,12 @@ COMPX:
 		password
 		first_name
 		last_name
-		attendance										//New 
+		attendance
 	glossary:
 		term_id (PRIMARY)
 		term
 		definition
+		status
 	multi_questions:
 		question_id (PRIMARY)
 		question
@@ -29,10 +30,15 @@ COMPX:
 		answer2
 		answer3
 		answer4
+		answer5
+		answer6
+		status
+		no_of_answers
 	free_text_questions:
 		question_id (PRIMARY)
 		question
 		answer
+		status
 	queries:
 		student_id (linked to students)
 		query
