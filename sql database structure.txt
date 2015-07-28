@@ -38,6 +38,7 @@ COMPX:
 		question_id (PRIMARY)
 		question
 		answer
+		hint
 		status
 	queries:
 		student_id (linked to students)

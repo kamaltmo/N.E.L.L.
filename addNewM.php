@@ -208,6 +208,7 @@
 												question_id int NOT NULL,
 												question varchar (255),
 												answer varchar (255),
+												hint varchar (255),
 												status int NOT NULL DEFAULT 0,
 												PRIMARY KEY (question_id)
 											)") &&
