@@ -52,7 +52,7 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</button>
-					<a class="navbar-brand" href="#"><span>N.E.L.L. Test</span></a>
+					<a class="navbar-brand" href="index.php"><span>N.E.L.L. Test</span></a>
 				</div>
 				<div class="collapse navbar-collapse" id="navbar-ex-collapse">
 					<ul class="nav navbar-nav navbar-right"></ul>

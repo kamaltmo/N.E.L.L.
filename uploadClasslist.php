@@ -99,14 +99,8 @@
 		</div>
 		<div class="section">
 			<div class="container">
+				<div class="col-md-4"></div>
                 <div class="row">
-                    <div class="col-md-4">
-                    	<ul class="nav nav-pills nav-stacked lead list-group text-info">
-                        	<li class="active"><a href="uploadExcel.php">Upload Student Information</a></li>
-                        	<li ><a href="uploadExcelQuestions.php">Upload Questions</a></li>
-                        	<li ><a href="uploadExcelGlossary.php">Upload Glossary</a></li>
-                    	</ul>
-                	</div>
                     <div class="col-md-4">
                         <div class="well well-lg">
 							<?php

@@ -93,7 +93,7 @@
                     </form>
                     <div class= well>
                     <ul class="nav nav-pills nav-stacked lead list-group text-info">
-                        <li ><a id="uploadStdInfo" href="uploadExcel.php">Upload Student Information</a></li>
+                        <li ><a id="uploadStdInfo" href="uploadClasslist.php">Upload Class List</a></li>
                         <li ><a id="queCreator" href="questionCreator.php">Questions Creator</a></li>
                         <li ><a id="gloCreator" href="glossaryCreator.php">Glossary Creator</a></li>
                     </ul>
