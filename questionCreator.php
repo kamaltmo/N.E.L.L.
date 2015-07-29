@@ -186,12 +186,12 @@
                                     <div class="col-md-4">
 
                                             <div class="form-group">
-                                                <label class="control-label">Question</label>
+                                                <label class="control-label">Question*</label>
                                                 <input class="form-control input-sm" type="text" id="questionName"
                                                 name="questionName" title= "questionInfo">
                                             </div>
                                             <div class="form-group">
-                                                <label class="control-label" contenteditable="true">Hint</label>
+                                                <label class="control-label" contenteditable="true">Hint*</label>
                                                 <textarea class="form-control" id="questionHint" name="questionHint" title= "questionInfo"></textarea>
                                             </div>
 
@@ -200,7 +200,7 @@
 
                                             <div class="form-group has-success">
                                                 <div class="col-sm-2">
-                                                    <label for="CorrectAns" class="control-label">Correct Answer</label>
+                                                    <label for="CorrectAns" class="control-label">Correct Answer*</label>
                                                 </div>
                                                 <div class="col-sm-10">
                                                     <input type="text" class="form-control" id="CorrectAns" name = "CorrectAns" placeholder="Answer" title= "questionInfo">
@@ -208,7 +208,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <div class="col-sm-2">
-                                                    <label for="otherAns1" class="control-label">Possible Answer</label>
+                                                    <label for="otherAns1" class="control-label">Possible Answer*</label>
                                                 </div>
                                                 <div class="col-sm-10">
                                                     <input type="text" class="form-control" id="otherAns1" name = "otherAns1"  placeholder="Answer" title= "questionInfo">
@@ -219,7 +219,7 @@
                                                     <label for="otherAns2" class="control-label">Possible Answer</label>
                                                 </div>
                                                 <div class="col-sm-10">
-                                                    <input type="text" class="form-control" id="otherAns2" name = "otherAns2" placeholder="Answer" title= "questionInfo">
+                                                    <input type="text" class="form-control" id="otherAns2" name = "otherAns2" placeholder="Answer" >
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -227,10 +227,25 @@
                                                     <label for="otherAns3" class="control-label">Possible Answer</label>
                                                 </div>
                                                 <div class="col-sm-10">
-                                                    <input type="text" class="form-control" id="otherAns3" name = "otherAns3" placeholder="Answer" title= "questionInfo">
+                                                    <input type="text" class="form-control" id="otherAns3" name = "otherAns3" placeholder="Answer">
                                                 </div>
                                             </div>
-                                        
+                                            <div class="form-group">
+                                                <div class="col-sm-2">
+                                                    <label for="otherAns4" class="control-label">Possible Answer</label>
+                                                </div>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" id="otherAns4" name = "otherAns4" placeholder="Answer" >
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-sm-2">
+                                                    <label for="otherAns5" class="control-label">Possible Answer</label>
+                                                </div>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" id="otherAns5" name = "otherAns5" placeholder="Answer">
+                                                </div>
+                                            </div>
                                     </div>
                                 </div>
                             </div>
@@ -359,7 +374,7 @@
                 $('[title="question"]').each(function() {
                     $('[title="questionInfo"]').each(function() {
                         if($(this).val() == "") {
-                            alert("Please Fill In All The Available Fields");
+                            alert("Please Fill In All The Required Fields (*)");
                             complete = false
                             return false;
                         }

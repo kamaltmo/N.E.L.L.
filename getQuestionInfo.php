@@ -68,7 +68,22 @@ if ($conn->connect_error) {
                                                     <input value="'.$row['answer4'].'" type="text" class="form-control" id="otherAns3" name="otherAns3" placeholder="Answer">
                                                 </div>
                                             </div>
-                                        
+                                            <div class="form-group">
+                                                <div class="col-sm-2">
+                                                    <label for="otherAns4" class="control-label">Possible Answer</label>
+                                                </div>
+                                                <div class="col-sm-10">
+                                                    <input value="'.$row['answer5'].'" type="text" class="form-control" id="otherAns4" name="otherAns4" placeholder="Answer">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-sm-2">
+                                                    <label for="otherAns5" class="control-label">Possible Answer</label>
+                                                </div>
+                                                <div class="col-sm-10">
+                                                    <input value="'.$row['answer6'].'" type="text" class="form-control" id="otherAns5" name="otherAns5" placeholder="Answer">
+                                                </div>
+                                            </div>
                                     </div>
                                 </div>
                             </div>
