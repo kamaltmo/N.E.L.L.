@@ -1,0 +1,45 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+PowerPointAddIn
+</name>
+</assembly>
+<members>
+<member name="M:PowerPointAddIn.ThisAddIn.#ctor(Microsoft.Office.Tools.Factory,System.IServiceProvider)">
+</member><member name="M:PowerPointAddIn.ThisAddIn.Initialize">
+</member><member name="M:PowerPointAddIn.ThisAddIn.FinishInitialization">
+</member><member name="M:PowerPointAddIn.ThisAddIn.InitializeDataBindings">
+</member><member name="M:PowerPointAddIn.ThisAddIn.InitializeCachedData">
+</member><member name="M:PowerPointAddIn.ThisAddIn.InitializeData">
+</member><member name="M:PowerPointAddIn.ThisAddIn.BindToData">
+</member><member name="M:PowerPointAddIn.ThisAddIn.StartCaching(System.String)">
+</member><member name="M:PowerPointAddIn.ThisAddIn.StopCaching(System.String)">
+</member><member name="M:PowerPointAddIn.ThisAddIn.IsCached(System.String)">
+</member><member name="M:PowerPointAddIn.ThisAddIn.BeginInitialization">
+</member><member name="M:PowerPointAddIn.ThisAddIn.EndInitialization">
+</member><member name="M:PowerPointAddIn.ThisAddIn.InitializeControls">
+</member><member name="M:PowerPointAddIn.ThisAddIn.InitializeComponents">
+</member><member name="M:PowerPointAddIn.ThisAddIn.NeedsFill(System.String)">
+</member><member name="M:PowerPointAddIn.ThisAddIn.OnShutdown">
+</member><member name="T:PowerPointAddIn.ThisAddIn">
+</member><member name="M:PowerPointAddIn.Globals.#ctor">
+</member><member name="T:PowerPointAddIn.Globals">
+</member><member name="M:PowerPointAddIn.ThisRibbonCollection.#ctor(Microsoft.Office.Tools.Ribbon.RibbonFactory)">
+</member><member name="T:PowerPointAddIn.ThisRibbonCollection">
+</member><member name="P:PowerPointAddIn.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:PowerPointAddIn.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:PowerPointAddIn.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member>
+</members>
+</doc>

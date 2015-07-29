@@ -1,0 +1,17 @@
+C:\Users\Kamal\documents\visual studio 2013\Projects\PowerPointAddIn\PowerPointAddIn\bin\Debug\PowerPointAddIn.dll
+C:\Users\Kamal\documents\visual studio 2013\Projects\PowerPointAddIn\PowerPointAddIn\bin\Debug\PowerPointAddIn.pdb
+C:\Users\Kamal\documents\visual studio 2013\Projects\PowerPointAddIn\PowerPointAddIn\bin\Debug\PowerPointAddIn.xml
+C:\Users\Kamal\documents\visual studio 2013\Projects\PowerPointAddIn\PowerPointAddIn\bin\Debug\PowerPointAddIn.dll.manifest
+C:\Users\Kamal\documents\visual studio 2013\Projects\PowerPointAddIn\PowerPointAddIn\bin\Debug\PowerPointAddIn.vsto
+C:\Users\Kamal\documents\visual studio 2013\Projects\PowerPointAddIn\PowerPointAddIn\bin\Debug\Microsoft.Office.Tools.Common.v4.0.Utilities.dll
+C:\Users\Kamal\documents\visual studio 2013\Projects\PowerPointAddIn\PowerPointAddIn\bin\Debug\Microsoft.Office.Tools.Common.v4.0.Utilities.xml
+C:\Users\Kamal\documents\visual studio 2013\Projects\PowerPointAddIn\PowerPointAddIn\obj\Debug\PowerPointAddIn.Ribbon1.resources
+C:\Users\Kamal\documents\visual studio 2013\Projects\PowerPointAddIn\PowerPointAddIn\obj\Debug\PowerPointAddIn.Resources.resources
+C:\Users\Kamal\documents\visual studio 2013\Projects\PowerPointAddIn\PowerPointAddIn\obj\Debug\PowerPointAddIn.vbproj.GenerateResource.Cache
+C:\Users\Kamal\documents\visual studio 2013\Projects\PowerPointAddIn\PowerPointAddIn\obj\Debug\PowerPointAddIn.dll
+C:\Users\Kamal\documents\visual studio 2013\Projects\PowerPointAddIn\PowerPointAddIn\obj\Debug\PowerPointAddIn.xml
+C:\Users\Kamal\documents\visual studio 2013\Projects\PowerPointAddIn\PowerPointAddIn\obj\Debug\PowerPointAddIn.pdb
+C:\Users\Kamal\documents\visual studio 2013\Projects\PowerPointAddIn\PowerPointAddIn\obj\Debug\PowerPointAddIn.LoginForm.resources
+C:\Users\Kamal\documents\visual studio 2013\Projects\PowerPointAddIn\PowerPointAddIn\obj\Debug\PowerPointAddIn.Login_Form.resources
+C:\Users\Kamal\documents\visual studio 2013\Projects\PowerPointAddIn\PowerPointAddIn\obj\Debug\PowerPointAddIn.Question_form.resources
+C:\Users\Kamal\documents\visual studio 2013\Projects\PowerPointAddIn\PowerPointAddIn\obj\Debug\PowerPointAddIn.Glossary_form.resources
