@@ -9,8 +9,8 @@
 			***************************************************************************************************************************
 			JOBS:
 				*	Add login
-				*	Change 'comp103' to be whatever module the student is logged into
-				*	Send info to the lecturer
+				*	Change 'comp103' to $_SESSION["modCode"] or similar
+				*	SEND INFO BACK TO THE LECTURER!
 				*	Select correct checkbox / answer if the answer was correct (or remove question from the options entirely)
 			***************************************************************************************************************************
 			
@@ -99,8 +99,8 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		<title>Create a new Module</title>
-		<meta name="description" content="This page enables the administrator of the N.E.L.L. system to add modules"/>
+		<title>Questions</title>
+		<meta name="description" content="This page allows the student to view and answer the currently active questions"/>
 		<meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <script type="text/javascript" src="css/jquery.min.js"></script>
