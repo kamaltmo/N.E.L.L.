@@ -14,15 +14,12 @@
 				*	103.1:	Could not add the query to the queries table, maybe there is no student with that id on the system
 			***************************************************************************************************************************
 	*/
-	
+	include 'database_info.php';
 	session_start();
 	if(!isset($_SESSION['stu_id'])){
 		header("location: studentLogin.php");
 	}
 	
-	define ("DB_HOST", "localhost");
-	define ("DB_USER", "root");
-	define ("DB_PASS", "");	
 	define ("DB_NAME", $_SESSION["modCode"]);
 	
 	$link = mysql_connect(DB_HOST, DB_USER, DB_PASS) or die("Couldn't make connection.");

@@ -1,5 +1,5 @@
 <?php
-
+	include 'database_info.php';
 	session_start(); // Start Session
 	$error=''; //Store error messages
 	if (isset($_POST['submit'])) {
@@ -11,16 +11,11 @@
 		$uName = $_POST['username'];
 		$pWord = $_POST['password'];
 
-		$servername = "localhost";
-		$username = "root";
-		$password = "";
-		$dbname = "nell";
-
 		// Create connection
 		$conn = new mysqli($servername, $username, $password, $dbname);
 		// Check connection
 		if ($conn->connect_error) {
-			header("Location: index.html");
+			header("Location: index.php");
 			$error = "Connection failed: " . $conn->connect_error;
 		} else {
 			$sql = "SELECT * FROM lecturers WHERE username = '$uName' AND password = '$pWord'";

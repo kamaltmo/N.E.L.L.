@@ -1,9 +1,6 @@
 <?php
+    include 'database_info.php';
     session_start(); // Start Session
-    $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $dbname = "nell";
 
 
     $error=''; //Store error messages

@@ -15,7 +15,6 @@
 	//		-	Add option and pages to add / delete lecturers
 	//		-	Split options into two groups: Module Info and Lecturer (maybe display in a table)
 	//**************************************************************************************************
-	
 	session_start();
 	if(isset($_SESSION['login_user']))
 	{

@@ -4,7 +4,7 @@
 		Allows admin to view the modules on the N.E.L.L. system
 	
 	*/
-	
+	include 'database_info.php';
 	session_start();
 	if(isset($_SESSION['login_user']))
 	{
@@ -29,10 +29,6 @@
 	
 	$section = 0;
 	
-	define ("DB_HOST", "localhost");
-	define ("DB_USER", "root");
-	define ("DB_PASS", "");
-	define ("DB_NAME", "nell");
 	$link = mysql_connect(DB_HOST, DB_USER, DB_PASS) or die("Couldn't make connection.");
 	$db = mysql_select_db(DB_NAME, $link) or die("Couldn't select database");
 ?>

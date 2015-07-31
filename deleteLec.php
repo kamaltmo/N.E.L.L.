@@ -15,6 +15,7 @@
 	//		-	4.2:	Lecturer could not be deleted from the 'lecturers' table in the nell database
 	//**************************************************************************************************
 	
+	include 'database_info.php';
 	session_start();
 	if(isset($_SESSION['login_user']))
 	{
@@ -37,10 +38,6 @@
 		header("location: index.php");
 	}
 	
-	define ("DB_HOST", "localhost");
-	define ("DB_USER", "root");
-	define ("DB_PASS", "");
-	define ("DB_NAME", "nell");
 	$link = mysql_connect(DB_HOST, DB_USER, DB_PASS) or die("Couldn't make connection.");
 	$db = mysql_select_db(DB_NAME, $link) or die("Couldn't select database");
 	

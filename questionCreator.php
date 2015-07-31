@@ -1,4 +1,5 @@
 <?php
+    include 'database_info.php';
     session_start();
     //Redirect if not logged in or not a admin or teacher
     if(!isset($_SESSION['login_user'])){
@@ -14,11 +15,6 @@
         header("location: profile.php");
     } else {
         //check that lecturer has access to this module
-        $servername = "localhost";
-        $username = "root";
-        $password = "";
-        $dbname = "nell";
-
         // Create connection
         $conn = new mysqli($servername, $username, $password, $dbname);
         // Check connection

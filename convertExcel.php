@@ -52,14 +52,8 @@
                     <div class="col-md-4">
                         <div class="well well-lg">
 							<?php
-								define ("DB_HOST", "localhost");
-								define ("DB_USER", "root");
-								define ("DB_PASS", "");
-								
-								//	***********************************************
-								//	Set up all details about the table you're using
-								
-								define ("DB_NAME", "nell"); 						
+								include 'database_info.php';
+														
 								$databasetable = "login";								// Change to 'test'
 								$column1 = "username";
 								$column2 = "student_id";

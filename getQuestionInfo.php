@@ -1,9 +1,7 @@
 <?php
+include 'database_info.php';
 session_start();
 
-$servername = "localhost";
-$username = "root";
-$password = "";
 $dbname = "". strtolower($_SESSION['module']);
 
 // Create connection

@@ -1,4 +1,5 @@
 <?php
+	include 'database_info.php';
 	session_start();
     
 	$uploadStatus = 0;

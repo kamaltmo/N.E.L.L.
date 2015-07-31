@@ -1,4 +1,5 @@
 <?php
+    include 'database_info.php';
     session_start();
 
     if(!isset($_SESSION['login_user'])){
@@ -9,12 +10,6 @@
         $uName = $_SESSION['login_user'];
         $id = $_SESSION['userID'];
     }
-
-
-    $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $dbname = "nell";
 
 ?>
 
