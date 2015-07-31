@@ -32,12 +32,20 @@ COMPX:
 		answer4
 		answer5
 		answer6
+		reply1
+		reply2
+		reply3
+		reply4
+		reply5
+		reply6
 		status
 		no_of_answers
 	free_text_questions:
 		question_id (PRIMARY)
 		question
 		answer
+		correct_reply
+		incorrect_reply
 		hint
 		status
 	queries:

@@ -198,6 +198,12 @@
 												answer4 varchar (255),
 												answer5 varchar (255),
 												answer6 varchar (255),
+												reply1 int (4) NOT NULL DEFAULT 0,
+												reply2 int (4) NOT NULL DEFAULT 0,
+												reply3 int (4) NOT NULL DEFAULT 0,
+												reply4 int (4) NOT NULL DEFAULT 0,
+												reply5 int (4) NOT NULL DEFAULT 0,
+												reply6 int (4) NOT NULL DEFAULT 0,
 												hint varchar (255),
 												status int NOT NULL DEFAULT 0,
 												no_of_answers INT (1) NOT NULL DEFAULT 0,
@@ -209,6 +215,8 @@
 												question varchar (255),
 												answer varchar (255),
 												hint varchar (255),
+												correct_reply int (4) NOT NULL DEFAULT 0,
+												incorrect_reply int (4) NOT NULL DEFAULT 0,
 												status int NOT NULL DEFAULT 0,
 												PRIMARY KEY (question_id)
 											)") &&

@@ -8,23 +8,30 @@
 			
 			***************************************************************************************************************************
 			JOBS:
-				*	Add login
-				*	Change 'comp103' to $_SESSION["modCode"] or similar
 				*	SEND INFO BACK TO THE LECTURER!
 				*	Select correct checkbox / answer if the answer was correct (or remove question from the options entirely)
+				*	Check box's have stopped appearing
+				*	FInd a way to save current content throughout page refresh
 			***************************************************************************************************************************
 			
 			***************************************************************************************************************************
 			ERRORS:
 				*	101.1: Could not find the correct hint to the question in the database
 				*	101.2: Could not find the correct answer to a free text question in the database
+				*	101.3: Could not increment the given answer's field
+				*	101.4: Couldn't find multi choice questions in the database
+				*	101.4: Couldn't find free text questions in the database
 			***************************************************************************************************************************
 	*/
 	session_start();
+	if(!isset($_SESSION['stu_id'])){
+		header("location: studentLogin.php");
+	}
+	
 	define ("DB_HOST", "localhost");
 	define ("DB_USER", "root");
 	define ("DB_PASS", "");	
-	define ("DB_NAME", "comp103");
+	define ("DB_NAME", $_SESSION["modCode"]);
 	
 	$link = mysql_connect(DB_HOST, DB_USER, DB_PASS) or die("Couldn't make connection.");
 	$db = mysql_select_db(DB_NAME, $link) or die("Couldn't select database");
@@ -60,16 +67,35 @@
 		return $random;
 	}
 	
+	// Returns true if the answer is correct, false otherwise
+	// Also submits the results
 	function check_answer($answerGiven, $qID)
 	{
 		if(((int)substr($qID, 0, 1)) == 1)
+		{
+			$answerNum = substr($answerGiven, -1);
+			$field = 'reply'.$answerNum;
+			if(mysql_query("UPDATE multi_questions SET ".$field." = ".$field." + 1 WHERE question_id = ".$qID))
+				$_POST["allSent"] = 1;
+			else
+				$_POST["allSent"] = 0;
 			return $answerGiven == 'answer1';
+		}
 		else
 		{
 			if($query = mysql_query("SELECT answer FROM free_text_questions WHERE question_id = " . $qID))
 			{
 				$answer = mysql_fetch_row($query);
-				return strtolower($answerGiven) == strtolower($answer[0]);
+				$correct = strtolower($answerGiven) == strtolower($answer[0]);
+				if($correct)
+					$field = "correct_reply";
+				else
+					$field = "incorrect_reply";
+				if(mysql_query("UPDATE free_text_questions SET ".$field." = ".$field." + 1 WHERE question_id = ".$qID))
+					$_POST["allSent"] = 1;
+				else
+					$_POST["allSent"] = 2;
+				return $correct;
 			}
 			else
 			{
@@ -166,14 +192,15 @@
 								echo '				<input type="radio" name="' . $row["question_id"] . '" value = "' . $key . '">' . $value . '</input><br/>';
 												}
 												if(isset($hints[$row["question_id"]]))
-								echo '				<div><label>' . $hints[$row["question_id"]]	. '</label>';
+								echo '				<div><label>Wrong, hint: </label>' . $hints[$row["question_id"]];
 												elseif(isset($_POST["submit"]))
 								echo '				<div><label>Correct</label>';				
 													
 								echo'			</div><br/>';
 											}
 										}
-										
+										else
+											echo 'Error 101.4';
 										/************************************************************************************************************
 										*																											*
 										*											FREE TEXT QUESTIONS												*
@@ -186,15 +213,31 @@
 								echo '			<label>' . $row["question"] . '</label><br/>
 												<input type = "text" name = "' . $row["question_id"] . '" autocomplete = "off"/><br/>';
 												if(isset($hints[$row["question_id"]]))
-								echo '				<div><label>' . $hints[$row["question_id"]]	. '</label>';
+								echo '				<div><label>Wrong, hint: </label>' . $hints[$row["question_id"]];
 												elseif(isset($_POST["submit"]))
 								echo '				<div><label>Correct</label>';
 											}
 										}
+										else
+											echo 'Error 101.5';
 										if(!$allCorrect || !isset($_POST["submit"]))
 								echo'		<br/><div class = "form-group">
 											<input type = "submit" name = "submit" value = "Next"/>
 										</div>';
+										if(isset($_POST["allSent"]))
+										{
+											switch($_POST["allSent"])
+											{
+												case 0:
+													echo 'Error 101.4: Unable to submit all answers';
+													break;
+												case 1:
+													echo 'Answers submitted';
+													break;
+												case 2:
+													echo 'Error 101.5: Unable to submit all answers';
+											}
+										}
 								echo '
 									</form>';
 							?>

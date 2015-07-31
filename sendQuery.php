@@ -1,15 +1,20 @@
 <?php
 	/* 
-		Terms
-			*	displays terms and their definitions to students, only active terms are displayed
+		Queries:
+			*	will work at any time, not just during lectures
+			*	students can currently send the same question multiple times
 			
-		Page reloads every 30 seconds, to change go to the body tag and change the number
+			***************************************************************************************************************************
+			JOBS:
+				*	Could add a 'subject' field
+			***************************************************************************************************************************
 			
 			***************************************************************************************************************************
 			ERRORS:
-				*	102.1: Could not get the terms from the glossary
+				*	103.1:	Could not add the query to the queries table, maybe there is no student with that id on the system
 			***************************************************************************************************************************
 	*/
+	
 	session_start();
 	if(!isset($_SESSION['stu_id'])){
 		header("location: studentLogin.php");
@@ -23,13 +28,24 @@
 	$link = mysql_connect(DB_HOST, DB_USER, DB_PASS) or die("Couldn't make connection.");
 	$db = mysql_select_db(DB_NAME, $link) or die("Couldn't select database");
 	
+	if(isset($_POST["submit"]))
+	{
+		if(mysql_query("INSERT INTO queries(query, student_id) VALUES('" . $_POST["question"] . "', " . $_SESSION['stu_id']))
+		{
+			$message = "Question sent";
+		}
+		else
+		{
+			$message = "Could not send question,<br/>Error 103.1";
+		}
+	}
 ?>
 
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		<title>Terms</title>
-		<meta name="description" content="This page allows the student to view the currently active terms"/>
+		<title>Send a Query</title>
+		<meta name="description" content="This page allows the student to ask the lecturer questions"/>
 		<meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <script type="text/javascript" src="css/jquery.min.js"></script>
@@ -39,7 +55,7 @@
         <link href="css/bootstrap.css"
         rel="stylesheet" type="text/css">
 	</head>
-	<body onload="setInterval('window.location.reload()', 30000);">
+	<body>
 		<div class="navbar navbar-default navbar-inverse navbar-static-top">
 			<div class="container">
 				<div class="navbar-header">
@@ -62,19 +78,23 @@
                     <div class="col-md-4"></div>
                     <div class="col-md-4">
                         <div class="well well-lg">
-							<div class = "form-group">
-								<?php
-									if($query = mysql_query("SELECT term, definition FROM glossary WHERE status = 1"))
-									{
-										while($row = mysql_fetch_assoc($query))
+							<form action = "<?php $_SERVER["PHP_SELF"] ?>" method="post" enctype="multipart/form-data">
+								<div class = "form-group">
+									<?php
+										if(isset($_POST["submit"]))
 										{
-											echo '<label>' . $row["term"] . '</label><br/>' . $row["definition"] . '<br/><br/>';
+											echo ' <h2>' . $message . '</h2><br/>';
 										}
-									}
-									else
-										echo 'Error 102.1';
-								?>
-							</div>
+									?>
+									<label>
+										Question:
+									</label><br/>
+									<input type = "text" name = "question" autocomplete = "off"/><br/><br/><br/>
+									<div class = "form-group">
+										<input type = "submit" name = "submit" value = "Next"/>
+									</div>
+								</div>
+							</form>
 						</div>
 					</div>
 				</div>

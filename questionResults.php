@@ -1,28 +1,68 @@
 <?php
 	/* 
-		Terms
-			*	displays terms and their definitions to students, only active terms are displayed
+		Queries:
+			*	The main page of the lecturer during lectures
 			
-		Page reloads every 30 seconds, to change go to the body tag and change the number
+			***************************************************************************************************************************
+			JOBS:
+				*	Change 'comp103' to $_SESSION["modCode"] or similar
+				*	Add the student_id of the student logged in to the insert command
+			***************************************************************************************************************************
 			
 			***************************************************************************************************************************
 			ERRORS:
-				*	102.1: Could not get the terms from the glossary
+				*	103.1:	Could not add the query to the queries table, maybe there is no student with that id on the system
 			***************************************************************************************************************************
 	*/
 	session_start();
-	if(!isset($_SESSION['stu_id'])){
-		header("location: studentLogin.php");
-	}
-	
 	define ("DB_HOST", "localhost");
 	define ("DB_USER", "root");
 	define ("DB_PASS", "");	
-	define ("DB_NAME", $_SESSION["modCode"]);
+	define ("DB_NAME", "comp103");
 	
 	$link = mysql_connect(DB_HOST, DB_USER, DB_PASS) or die("Couldn't make connection.");
 	$db = mysql_select_db(DB_NAME, $link) or die("Couldn't select database");
 	
+	if(isset($_SESSION['login_user']))
+	{
+		if($_SESSION['admin'] == '0') 
+		{
+					header("location: profile.php");
+		}
+	} 
+	else 
+	{
+		header("location: index.php");
+	}
+	
+	$section = 0;
+	
+	if(isset($_POST["submit"]))
+		$_SESSION["modCode"] = $_POST["modCode"];
+	if(isset($_SESSION["modCode"]))
+		$section = 1;
+	
+	function selectMod()
+	{
+		echo '
+			<form action="' . $_SERVER["PHP_SELF"] . '" method="post" enctype="multipart/form-data">
+				<div class = "form-group">
+					<label class = "control-label">
+						Select Module
+					</label>
+					<select name = "modOption">';
+						$query = mysql_query("SELECT mod_code FROM modules WHERE lecturer_id = " . $_SESSION["userID"]);
+						while($row = mysql_fetch_array($query))
+						{
+							echo '<option value = "' . $row["mod_code"] . '">' . $row["mod_code"] . '</option>';
+						}
+		echo '		</select>
+				</div>
+				<div class = "form-group">
+					<input type = "submit" name = "submit" value = "Go"/>
+				</div>
+			</form>';
+	}
 ?>
 
 <html>
@@ -62,19 +102,17 @@
                     <div class="col-md-4"></div>
                     <div class="col-md-4">
                         <div class="well well-lg">
-							<div class = "form-group">
-								<?php
-									if($query = mysql_query("SELECT term, definition FROM glossary WHERE status = 1"))
-									{
-										while($row = mysql_fetch_assoc($query))
-										{
-											echo '<label>' . $row["term"] . '</label><br/>' . $row["definition"] . '<br/><br/>';
-										}
-									}
-									else
-										echo 'Error 102.1';
-								?>
-							</div>
+							<?php
+								switch($section)
+								{
+									case 0:
+										selectMod();
+										break;
+									case 1:
+										selectMod();
+										
+								}
+							?>
 						</div>
 					</div>
 				</div>
